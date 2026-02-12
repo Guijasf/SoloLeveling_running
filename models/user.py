@@ -12,3 +12,4 @@ class User(Base):
 
     xp = Column(Integer, default=0)
     level = Column(Integer, default=1)
+    rank = Column(String, default="Bonze")
