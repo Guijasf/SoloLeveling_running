@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f7d55fd9-bc33-4413-bb74-aa373259256e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/frontend/dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/frontend/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/frontend/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/daily_mission.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/life_area.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/metric_log.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/metric_type.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/user_progress.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/init.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/life_area_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/metric_log_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/metric_type_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/mission_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/scoring_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/daily_mission_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/life_area_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/metric_log_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/metric_type_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/focus_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/mission_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/radar_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/scoring_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/streak_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SoloLeveling.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SoloLeveling.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/goal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/goal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/goal_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/goal_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/user_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/user_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/goal_schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/goal_schema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/user_schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/user_schema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/level_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/level_system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/rank_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rank_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/xp_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/xp_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/solo_leveling.db" beforeDir="false" afterPath="$PROJECT_DIR$/solo_leveling.db" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.main.executor": "Run",
+    "git-widget-placeholder": "master",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Guilherme.amaral\Documents\SoloLeveling\app\core" />
+      <recent name="C:\Users\Guilherme.amaral\Documents\SoloLeveling\app" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PY-252.26199.168" />
+        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/SoloLeveling$main.coverage" NAME="main Coverage Results" MODIFIED="1770912038421" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+  </component>
+</project>
