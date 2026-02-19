@@ -1,9 +1,14 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
 from app.core.database import Base
+
 
 class LifeArea(Base):
     __tablename__ = "life_areas"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     name = Column(String, nullable=False)
     weight = Column(Float, default=1.0)
+
+    user = relationship("User")

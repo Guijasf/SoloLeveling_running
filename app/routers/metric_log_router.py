@@ -2,11 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
 from app.models.metric_log import MetricLog
-from app.models.user_progress import UserProgress
-from app.schemas.metric_log_schema import MetricLogCreate, MetricLogResponse
-from app.services.xp_service import add_xp
-from app.services.streak_service import update_streak
-
+from app.schemas.metric_log_schema import MetricLogCreate
+from app.services.progress_engine import process_user_progress
 
 router = APIRouter(prefix="/metric-logs", tags=["Metric Logs"])
 
@@ -19,7 +16,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=MetricLogResponse)
+@router.post("/")
 def create_log(log: MetricLogCreate, db: Session = Depends(get_db)):
 
     new_log = MetricLog(**log.model_dump())
@@ -27,23 +24,15 @@ def create_log(log: MetricLogCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_log)
 
-    # 🔥 adicionar XP automático
-    progress = db.query(UserProgress).filter(
-        UserProgress.user_id == log.user_id
-    ).first()
+    # Engine recebe o novo log para calcular XP corretamente
+    result = process_user_progress(db, log.user_id, new_log)
 
-    if progress:
-        add_xp(progress, 20)
+    return {
+        "metric": new_log,
+        "progress": result
+    }
 
-        update_streak(progress)
 
-        progress.level = calculate_level(progress.xp)
-        progress.rank = calculate_rank(progress.level)
-
-        db.commit()
-
-    return new_log
-
-@router.get("/", response_model=list[MetricLogResponse])
+@router.get("/")
 def list_logs(db: Session = Depends(get_db)):
     return db.query(MetricLog).all()

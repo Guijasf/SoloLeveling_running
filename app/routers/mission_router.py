@@ -5,8 +5,9 @@ from datetime import date
 from app.core.database import SessionLocal
 from app.models.daily_mission import DailyMission
 from app.schemas.daily_mission_schema import DailyMissionResponse
-from app.services.mission_service import generate_daily_missions
-from app.services.scoring_service import calculate_area_scores
+from app.services.mission_service import generate_dynamic_missions
+from app.services.scoring_service import calculate_area_scores, find_weakest_area, calculate_trend
+from app.services.focus_service import get_current_focus
 
 
 router = APIRouter(prefix="/missions", tags=["missions"])
@@ -22,9 +23,18 @@ def get_db():
 
 @router.get("/{user_id}", response_model=list[DailyMissionResponse])
 def get_today_missions(user_id: int, db: Session = Depends(get_db)):
+    """
+    Obtém ou gera as missões dinâmicas de hoje.
 
+    Missões são geradas automaticamente baseadas em:
+    - Score da área mais fraca
+    - Tendência (crescendo/caindo)
+    - Foco semanal (se existe)
+    - Rank do usuário
+    """
     today = date.today()
 
+    # Verificar se existem missões de hoje
     missions = db.query(DailyMission).filter(
         DailyMission.user_id == user_id,
         DailyMission.mission_date == today
@@ -33,8 +43,53 @@ def get_today_missions(user_id: int, db: Session = Depends(get_db)):
     if missions:
         return missions
 
-    # se não existir, gera novas
-    area_scores = calculate_area_scores(db, user_id)
-    weakest = min(area_scores, key=lambda x: x["score"])
+    # Se não existem, gerar novas (dinâmicas)
+    from app.models.user_progress import UserProgress
 
-    return generate_daily_missions(db, user_id, weakest)
+    area_scores = calculate_area_scores(db, user_id)
+    weakest = find_weakest_area(area_scores)
+
+    if not weakest:
+        return []
+
+    # Coletar contexto
+    trend = calculate_trend(db, user_id)
+    focus = get_current_focus(db, user_id)
+    progress = db.query(UserProgress).filter(UserProgress.user_id == user_id).first()
+
+    is_focused = focus and focus.area_name == weakest["area"]
+
+    context = {
+        "area": weakest["area"],
+        "score": weakest["score"],
+        "trend": trend,
+        "rank": progress.rank if progress else "E",
+        "streak": progress.current_streak if progress and hasattr(progress, 'current_streak') else 0,
+        "is_focused": is_focused,
+        "reason": "focus" if is_focused else ("weak" if weakest["score"] < 5 else "normal")
+    }
+
+    # Gerar missões dinâmicas
+    missions = generate_dynamic_missions(db, user_id, context)
+
+    return missions
+
+
+@router.post("/{mission_id}/complete")
+def complete_mission(mission_id: int, db: Session = Depends(get_db)):
+    """Marca missão como completa"""
+    mission = db.query(DailyMission).filter(DailyMission.id == mission_id).first()
+
+    if not mission:
+        return {"error": "Missão não encontrada"}
+
+    mission.completed = True
+    db.commit()
+
+    return {
+        "status": "completed",
+        "mission_id": mission_id,
+        "xp_reward": mission.xp_reward,
+        "title": mission.title
+    }
+

@@ -4,8 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
 from app.models.goal import Goal
 from app.schemas.goal_schema import GoalCreate, GoalResponse
-
-from app.services.xp_service import add_xp
+from app.services.progress_engine import process_user_progress
 from fastapi import HTTPException
 
 router = APIRouter(prefix="/goals", tags=["goals"])
@@ -38,13 +37,14 @@ def complete_goal(goal_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Meta já concluida")
 
     goal.completed = True
-
-    user = add_xp(db, goal.user_id, 50)
-
     db.commit()
+
+    # Engine centralizada processa o XP da goal completada
+    progress_result = process_user_progress(db, goal.user_id)
 
     return {
         "mensagem": "Meta concluida com sucesso!",
-        "user_level": user.level,
-        "user_xp": user.xp
+        "user_level": progress_result["level"],
+        "user_xp": progress_result["xp"],
+        "xp_gained": 50  # TODO: Implementar XP reward customizável por goal
     }

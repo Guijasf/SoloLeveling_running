@@ -5,52 +5,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7d55fd9-bc33-4413-bb74-aa373259256e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/frontend/dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/frontend/script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/frontend/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/daily_mission.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/life_area.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/metric_log.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/metric_type.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/user_progress.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/init.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/life_area_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/metric_log_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/metric_type_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/mission_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/scoring_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/daily_mission_schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/life_area_schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/metric_log_schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/metric_type_schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/focus_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/mission_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/radar_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/scoring_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/streak_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ARCHITECTURE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA1_IMPLEMENTATION.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_60PORCENTO_COMPLETA.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO1_COMPLETO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO2_COMPLETO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO3_COMPLETO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO4_COMPLETO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO5_COMPLETO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_PLANO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_RESUMO_EXECUTIVO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CHECKLIST_FINAL_ENTREGAVEIS.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DIAGRAMA_PROGRESSO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DOCUMENTATION_INDEX.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/EXECUTIVE_SUMMARY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FILES_INDEX.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FINAL_CHECKLIST.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PROJECT_STATUS.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QUICK_DEV_GUIDE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QUICK_REFERENCE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RELATORIO_FINAL_CAMADA2.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RESUMO_PT.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/VISUAL_SUMMARY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/achievement.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/user_focus.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/achievement_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/focus_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/achievement_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/user_focus_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/achievement_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/difficulty_adapter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/progress_engine.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_achievements.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_difficulty_adapter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_dynamic_missions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_engine_stability.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_focus_system.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_integration_final.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_integration_simple.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/SoloLeveling.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SoloLeveling.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/goal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/goal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/goal_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/goal_router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/user_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/user_router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas/goal_schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/goal_schema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas/user_schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/user_schema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/level_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/level_system.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/rank_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rank_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/xp_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/xp_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/daily_mission.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/daily_mission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/life_area.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/life_area.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/metric_type.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/metric_type.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/user_progress.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user_progress.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routers/goal_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/goal_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routers/metric_log_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/metric_log_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routers/mission_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/mission_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routers/user_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/user_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/focus_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/focus_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/mission_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/mission_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/radar_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/radar_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/scoring_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/scoring_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/xp_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/xp_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solo_leveling.db" beforeDir="false" afterPath="$PROJECT_DIR$/solo_leveling.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Guilherme.amaral/Documents/SoloLeveling" value="39tE6MnKfuILEpWQvjculiZYCxl" />
+    </persistenceIdMap>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -64,19 +86,33 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="39tE6MnKfuILEpWQvjculiZYCxl" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -94,9 +130,29 @@
     </attachedChunks>
   </component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f7d55fd9-bc33-4413-bb74-aa373259256e" name="Changes" comment="" />
+      <created>1771506803765</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771506803765</updated>
+      <workItem from="1771506813581" duration="4908000" />
+      <workItem from="1771519529740" duration="4839000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SoloLeveling$main.coverage" NAME="main Coverage Results" MODIFIED="1770912038421" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

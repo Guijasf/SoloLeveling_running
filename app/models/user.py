@@ -6,10 +6,6 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    email = Column(String, unique=True)
-    password = Column(String)
-
-    xp = Column(Integer, default=0)
-    level = Column(Integer, default=1)
-    rank = Column(String, default="Bonze")
+    name = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=True)

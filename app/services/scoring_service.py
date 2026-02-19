@@ -8,12 +8,14 @@ from app.models.life_area import LifeArea
 
 
 def calculate_area_scores(db: Session, user_id: int):
-
+    """
+    Calcula scores de cada área da vida do usuário.
+    Retorna formato padronizado: [{"area": "Health", "score": 8.5}, ...]
+    """
     one_week_ago = date.today() - timedelta(days=7)
 
     results = (
         db.query(
-            LifeArea.id.label("area_id"),
             LifeArea.name.label("area_name"),
             func.avg(MetricLog.value).label("avg_value")
         )
@@ -21,17 +23,15 @@ def calculate_area_scores(db: Session, user_id: int):
         .join(MetricLog, MetricLog.metric_type_id == MetricType.id)
         .filter(MetricLog.user_id == user_id)
         .filter(MetricLog.log_date >= one_week_ago)
-        .group_by(LifeArea.id)
+        .group_by(LifeArea.id, LifeArea.name)
         .all()
     )
 
     area_scores = []
-
     for r in results:
         score = min((r.avg_value or 0), 10)
         area_scores.append({
-            "area_id": r.area_id,
-            "area_name": r.area_name,
+            "area": r.area_name,
             "score": round(score, 2)
         })
 
@@ -50,7 +50,10 @@ def calculate_life_score(area_scores):
 
 
 def find_weakest_area(area_scores):
-
+    """
+    Encontra a área com menor score.
+    Retorna: {"area": "Health", "score": 5.0}
+    """
     if not area_scores:
         return None
 
