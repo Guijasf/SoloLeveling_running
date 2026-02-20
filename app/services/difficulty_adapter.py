@@ -217,3 +217,187 @@ def get_adaptive_difficulty(db: Session, user_id: int, progress: UserProgress) -
         "xp_velocity": adapter.calculate_xp_velocity(7)
     }
 
+
+# Funções standalone para uso direto
+
+def analyze_user_performance(db: Session, user_id: int) -> dict:
+    """
+    Analisa performance do usuário nos últimos 7 dias
+
+    Retorna:
+    - completion_rate: % de missões completadas
+    - average_difficulty: dificuldade média das missões
+    - streak: dias consecutivos
+    - xp_velocity: XP ganho por dia (média)
+    - recommendation: "increase", "maintain", "decrease"
+    """
+    from app.models.daily_mission import DailyMission
+    from app.models.user_progress import UserProgress
+    from datetime import datetime, timedelta
+
+    # Buscar missões dos últimos 7 dias
+    seven_days_ago = datetime.now() - timedelta(days=7)
+
+    missions = db.query(DailyMission).filter(
+        DailyMission.user_id == user_id,
+        DailyMission.mission_date >= seven_days_ago.date()
+    ).all()
+
+    if not missions:
+        return {
+            "completion_rate": 0,
+            "average_difficulty": 1,
+            "streak": 0,
+            "xp_velocity": 0,
+            "recommendation": "maintain",
+            "level": "beginner"
+        }
+
+    # Calcular métricas
+    total_missions = len(missions)
+    completed_missions = sum(1 for m in missions if m.completed)
+    completion_rate = (completed_missions / total_missions) * 100 if total_missions > 0 else 0
+
+    difficulties = [m.difficulty or 1 for m in missions]
+    average_difficulty = sum(difficulties) / len(difficulties) if difficulties else 1
+
+    total_xp = sum(m.xp_reward for m in missions if m.completed)
+    xp_velocity = total_xp / 7  # XP por dia
+
+    # Buscar streak do usuário
+    progress = db.query(UserProgress).filter(UserProgress.user_id == user_id).first()
+    streak = progress.streak if progress else 0
+
+    # Determinar recomendação
+    recommendation = "maintain"
+    level = "intermediate"
+
+    if completion_rate >= 85 and average_difficulty >= 2:
+        recommendation = "increase"
+        level = "advanced"
+    elif completion_rate >= 90 and xp_velocity > 150:
+        recommendation = "increase"
+        level = "expert"
+    elif completion_rate < 50:
+        recommendation = "decrease"
+        level = "beginner"
+    elif completion_rate < 70 and average_difficulty > 2:
+        recommendation = "decrease"
+        level = "struggling"
+
+    return {
+        "completion_rate": round(completion_rate, 2),
+        "average_difficulty": round(average_difficulty, 2),
+        "streak": streak,
+        "xp_velocity": round(xp_velocity, 2),
+        "total_missions": total_missions,
+        "completed_missions": completed_missions,
+        "recommendation": recommendation,
+        "level": level
+    }
+
+
+def calculate_adaptive_difficulty(db: Session, user_id: int, base_difficulty: int = 2) -> int:
+    """
+    Calcula dificuldade adaptativa baseada no desempenho
+
+    Args:
+        base_difficulty: dificuldade base (1-5)
+
+    Returns:
+        Dificuldade ajustada (1-5)
+    """
+    performance = analyze_user_performance(db, user_id)
+
+    # Ajustar baseado na recomendação
+    if performance["recommendation"] == "increase":
+        return min(base_difficulty + 1, 5)
+    elif performance["recommendation"] == "decrease":
+        return max(base_difficulty - 1, 1)
+    else:
+        return base_difficulty
+
+
+def calculate_adaptive_xp(db: Session, user_id: int, base_xp: int, difficulty: int) -> int:
+    """
+    Calcula XP adaptativo baseado no desempenho
+    """
+    performance = analyze_user_performance(db, user_id)
+
+    # XP base por dificuldade
+    xp = base_xp * difficulty
+
+    # Bônus se streak alto
+    if performance["streak"] >= 7:
+        xp = int(xp * 1.2)
+    elif performance["streak"] >= 30:
+        xp = int(xp * 1.5)
+
+    # Se usuário está com completion rate baixo, dar mais XP para motivar
+    if performance["completion_rate"] < 50:
+        xp = int(xp * 1.3)
+
+    return xp
+
+
+def get_performance_insights(db: Session, user_id: int) -> dict:
+    """
+    Retorna insights sobre performance do usuário
+    """
+    performance = analyze_user_performance(db, user_id)
+
+    insights = []
+
+    # Insight sobre completion rate
+    if performance["completion_rate"] >= 90:
+        insights.append({
+            "type": "success",
+            "icon": "🎉",
+            "message": "Você está arrasando! Taxa de conclusão excepcional.",
+            "action": "Experimente desafios maiores!"
+        })
+    elif performance["completion_rate"] >= 70:
+        insights.append({
+            "type": "info",
+            "icon": "👍",
+            "message": "Bom trabalho! Você está progredindo consistentemente.",
+            "action": "Continue assim!"
+        })
+    elif performance["completion_rate"] < 50:
+        insights.append({
+            "type": "warning",
+            "icon": "💪",
+            "message": "Parece que as missões estão desafiadoras.",
+            "action": "Vamos ajustar a dificuldade para você!"
+        })
+
+    # Insight sobre streak
+    if performance["streak"] >= 30:
+        insights.append({
+            "type": "success",
+            "icon": "🔥",
+            "message": f"Sequência incrível de {performance['streak']} dias!",
+            "action": "Você é imparável!"
+        })
+    elif performance["streak"] >= 7:
+        insights.append({
+            "type": "info",
+            "icon": "⭐",
+            "message": f"{performance['streak']} dias de sequência! Não pare agora.",
+            "action": "Mantenha o ritmo!"
+        })
+
+    # Insight sobre XP velocity
+    if performance["xp_velocity"] > 200:
+        insights.append({
+            "type": "success",
+            "icon": "🚀",
+            "message": f"Velocidade de {performance['xp_velocity']:.0f} XP/dia! Você está voando!",
+            "action": "Continue nesse ritmo!"
+        })
+
+    return {
+        "performance": performance,
+        "insights": insights,
+        "next_difficulty_recommendation": calculate_adaptive_difficulty(db, user_id)
+    }

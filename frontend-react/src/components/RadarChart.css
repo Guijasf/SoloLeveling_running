@@ -1,0 +1,19 @@
+.radar-chart-card {
+  background: rgba(30, 30, 50, 0.8);
+  border: 1px solid #16c784;
+  border-radius: 12px;
+  padding: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.radar-chart-card h3 {
+  margin: 0 0 20px 0;
+  color: #16c784;
+  font-size: 1.2rem;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+

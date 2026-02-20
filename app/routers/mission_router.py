@@ -93,3 +93,36 @@ def complete_mission(mission_id: int, db: Session = Depends(get_db)):
         "title": mission.title
     }
 
+
+@router.post("/generate-smart/{user_id}")
+def generate_smart_missions_endpoint(user_id: int, db: Session = Depends(get_db)):
+    """
+    🧠 Gera missões INTELIGENTES usando difficulty adapter
+
+    Usa:
+    - Análise de performance dos últimos 7 dias
+    - Dificuldade adaptativa
+    - XP adaptativo
+    - Multiplicador de foco
+    - Priorização de áreas fracas
+    """
+    from app.services.mission_service import generate_smart_missions
+    from app.services.scoring_service import calculate_area_scores
+
+    # Calcular scores das áreas
+    area_scores = calculate_area_scores(db, user_id)
+
+    if not area_scores:
+        return {
+            "message": "Usuário sem dados suficientes para gerar missões",
+            "missions": []
+        }
+
+    # Gerar missões inteligentes
+    missions = generate_smart_missions(db, user_id, area_scores)
+
+    return {
+        "message": f"✅ {len(missions)} missões inteligentes geradas!",
+        "missions": missions,
+        "total": len(missions)
+    }

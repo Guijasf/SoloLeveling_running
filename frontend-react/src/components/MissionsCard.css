@@ -1,0 +1,113 @@
+.missions-card {
+  background: rgba(30, 30, 50, 0.8);
+  border: 1px solid #16c784;
+  border-radius: 12px;
+  padding: 25px;
+  backdrop-filter: blur(10px);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.missions-card h3 {
+  margin: 0 0 20px 0;
+  color: #16c784;
+  font-size: 1.2rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
+}
+
+.missions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mission-item {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s;
+}
+
+.mission-item:hover {
+  border-color: #16c784;
+  background: rgba(22, 199, 132, 0.05);
+}
+
+.mission-item.completed {
+  opacity: 0.6;
+  background: rgba(22, 199, 132, 0.1);
+  border-color: #16c784;
+}
+
+.mission-item.completed .mission-info h4 {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.mission-info {
+  flex: 1;
+}
+
+.mission-info h4 {
+  margin: 0 0 5px 0;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.mission-info p {
+  margin: 0 0 10px 0;
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+.mission-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.difficulty {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.reward {
+  color: #16c784;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-complete {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #16c784, #0fb981);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s;
+  font-size: 0.85rem;
+}
+
+.btn-complete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(22, 199, 132, 0.3);
+}
+
+.btn-complete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

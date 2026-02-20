@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal
+from app.core.dependencies import get_current_user
 from app.models.user import User
-from app.models.user_progress import UserProgress
-from app.schemas.user_schema import UserCreate, UserResponse
+from app.schemas.user_schema import UserResponse
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -17,21 +17,36 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=UserResponse)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    new_user = User(name=user.name, email=user.email, password=user.password)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    # cria progress automaticamente
-    progress = UserProgress(user_id=new_user.id, xp=0, level=1)
-    db.add(progress)
-    db.commit()
-
-    return new_user
-
-
-@router.get("/")
-def list_users(db: Session = Depends(get_db)):
+@router.get("/", response_model=list[UserResponse])
+async def list_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Lista todos os usuários (protegido)
+    """
     return db.query(User).all()
+
+
+@router.get("/{user_id}", response_model=UserResponse)
+async def get_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Busca usuário por ID (protegido)
+    """
+    from fastapi import HTTPException, status
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuário não encontrado"
+        )
+
+    return user
+
+

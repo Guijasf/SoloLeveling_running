@@ -1,0 +1,228 @@
+.levelup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.levelup-modal {
+  position: relative;
+  width: 500px;
+  max-width: 90%;
+  padding: 3rem;
+  background: linear-gradient(135deg, #0B0F1A, #1a1f2e);
+  border: 2px solid var(--neon-blue);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.6), 0 0 100px rgba(139, 92, 246, 0.4);
+  animation: levelUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes levelUpBounce {
+  0% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.levelup-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  bottom: -10px;
+  width: 4px;
+  height: 4px;
+  background: var(--neon-yellow);
+  border-radius: 50%;
+  animation: particleRise 1.5s ease-out infinite;
+  box-shadow: 0 0 10px var(--neon-yellow);
+}
+
+@keyframes particleRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-500px) scale(0);
+    opacity: 0;
+  }
+}
+
+.levelup-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.levelup-icon {
+  font-size: 5rem;
+  animation: iconBounce 0.6s ease-out 0.3s;
+  filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.levelup-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+  animation: titlePulse 1s ease-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.levelup-level {
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 0 30px rgba(59, 130, 246, 0.6),
+    inset 0 0 30px rgba(255, 255, 255, 0.1);
+  animation: levelSpin 3s linear infinite;
+}
+
+@keyframes levelSpin {
+  from {
+    transform: rotate(0deg);
+    box-shadow:
+      0 0 30px rgba(59, 130, 246, 0.6),
+      inset 0 0 30px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 50px rgba(139, 92, 246, 0.8),
+      inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+  to {
+    transform: rotate(360deg);
+    box-shadow:
+      0 0 30px rgba(59, 130, 246, 0.6),
+      inset 0 0 30px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.level-number {
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  animation: numberGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes numberGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    text-shadow: 0 0 40px rgba(255, 255, 255, 1), 0 0 60px var(--neon-cyan);
+  }
+}
+
+.levelup-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0;
+  animation: fadeIn 0.5s ease-out 0.5s backwards;
+}
+
+.levelup-rays {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  margin-top: -150px;
+  pointer-events: none;
+}
+
+.ray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 150px;
+  margin-left: -2px;
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.8), transparent);
+  transform-origin: center 0;
+  animation: rayRotate 4s linear infinite;
+}
+
+@keyframes rayRotate {
+  from {
+    transform: rotate(0deg);
+    opacity: 0.8;
+  }
+  to {
+    transform: rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .levelup-modal {
+    padding: 2rem;
+  }
+
+  .levelup-title {
+    font-size: 2rem;
+  }
+
+  .levelup-level {
+    width: 120px;
+    height: 120px;
+  }
+
+  .level-number {
+    font-size: 3rem;
+  }
+}
+

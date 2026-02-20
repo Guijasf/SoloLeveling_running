@@ -5,63 +5,122 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7d55fd9-bc33-4413-bb74-aa373259256e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ARCHITECTURE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA1_IMPLEMENTATION.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_60PORCENTO_COMPLETA.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO1_COMPLETO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO2_COMPLETO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO3_COMPLETO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO4_COMPLETO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_PASSO5_COMPLETO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_PLANO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CAMADA2_RESUMO_EXECUTIVO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CHECKLIST_FINAL_ENTREGAVEIS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DIAGRAMA_PROGRESSO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DOCUMENTATION_INDEX.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EXECUTIVE_SUMMARY.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FILES_INDEX.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FINAL_CHECKLIST.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROJECT_STATUS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QUICK_DEV_GUIDE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QUICK_REFERENCE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RELATORIO_FINAL_CAMADA2.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RESUMO_PT.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VISUAL_SUMMARY.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/achievement.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/user_focus.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/achievement_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/routers/focus_router.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/achievement_schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/user_focus_schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/achievement_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/difficulty_adapter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/services/progress_engine.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_achievements.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_difficulty_adapter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_dynamic_missions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_engine_stability.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_focus_system.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_integration_final.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_integration_simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SoloLeveling.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SoloLeveling.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CAMADA2_INTELIGENCIA_IMPLEMENTADA.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COMMIT_CAMADA2_INTELIGENCIA.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COMMIT_FRONTEND_PREMIUM.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COMMIT_MESSAGE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COMMIT_MESSAGE_FASE3.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ERRORS_FIXED.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ERRO_INSIGHTS_RESOLVIDO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FASE3.5_NOVAS_PAGINAS.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FASE3_IMPLEMENTADA.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FASE4_PARCIAL.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FRONTEND_IMPLEMENTADO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FRONTEND_PREMIUM_DOCS.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FRONTEND_PREMIUM_SUMMARY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GUIA_FRONTEND_PREMIUM.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GUIA_TESTE_COMPLETO.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GUIA_USO_FRONTEND.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LOGIN_TROUBLESHOOTING.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QUICK_START.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_ARCHITECTURE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_FINAL_CHECKLIST.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_FOLDER_STRUCTURE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_FRONTEND_INDEX.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_MASTER_INDEX.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_PROJECT_STATUS.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_QUICK_START.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_SUMMARY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_TESTING_GUIDE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/REACT_VISUAL_GUIDE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RESUMO_FASE3.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RESUMO_FASE4.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SEGUNDA_RODADA_FIXES.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/core/dependencies.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/core/security.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/user_settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/auth_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/dashboard_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/history_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/insights_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/notification_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/routers/profile_router.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/auth_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/profile_schema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/stats_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/SETUP.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/setup.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/setup.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/App.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/AchievementsCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/AchievementsCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/Header.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/Header.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/MissionsCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/MissionsCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/NotificationBell.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/NotificationBell.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/PrivateRoute.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/ProfileCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/ProfileCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/RadarChart.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/RadarChart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/RadarChart_fixed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/SafeRender.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/DailyProgressCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/DailyProgressCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/DailyTasksCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/DailyTasksCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/EvolutionCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/EvolutionCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/LevelUpModal.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/LevelUpModal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/PremiumHeader.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/PremiumHeader.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/StreakCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/StreakCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/context/AuthContext.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/index_fixed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/DashboardPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/DashboardPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/DashboardPremium.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/DashboardPremium.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/HistoryPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/HistoryPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/LoginPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/LoginPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/LoginPage_correct.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/ProfilePage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/ProfilePage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/SettingsPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/SettingsPage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/styles/designSystem.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/utils/api.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/open_swagger.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_api_auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_profile_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/frontend/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/frontend/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/frontend/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/frontend/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/daily_mission.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/daily_mission.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/life_area.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/life_area.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/metric_type.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/metric_type.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/user_progress.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user_progress.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routers/goal_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/goal_router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routers/metric_log_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/metric_log_router.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/routers/mission_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/mission_router.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/routers/user_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/user_router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/focus_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/focus_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/difficulty_adapter.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/difficulty_adapter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/level_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/level_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/services/mission_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/mission_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/radar_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/radar_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/scoring_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/scoring_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/xp_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/xp_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/rank_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/rank_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solo_leveling.db" beforeDir="false" afterPath="$PROJECT_DIR$/solo_leveling.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,6 +132,12 @@
     <persistenceIdMap>
       <entry key="_C:/Users/Guilherme.amaral/Documents/SoloLeveling" value="39tE6MnKfuILEpWQvjculiZYCxl" />
     </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="Auto" />
+      <entry key="agent-panel" value="Auto" />
+    </selectedModels>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -97,24 +162,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;C:/Users/Guilherme.amaral/AppData/Roaming/JetBrains/PyCharm2025.2/node/versions/24.13.1/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Guilherme.amaral\Documents\SoloLeveling\app\core" />
@@ -137,7 +203,11 @@
       <option name="presentableId" value="Default" />
       <updated>1771506803765</updated>
       <workItem from="1771506813581" duration="4908000" />
-      <workItem from="1771519529740" duration="4839000" />
+      <workItem from="1771519529740" duration="5457000" />
+      <workItem from="1771595176250" duration="3983000" />
+      <workItem from="1771599438648" duration="808000" />
+      <workItem from="1771606139228" duration="2003000" />
+      <workItem from="1771608388220" duration="2038000" />
     </task>
     <servers />
   </component>

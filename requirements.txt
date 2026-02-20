@@ -1,0 +1,26 @@
+# FastAPI e servidor
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Banco de dados
+sqlalchemy==2.0.25
+
+# Validação
+pydantic==2.5.3
+
+# Autenticação e segurança
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+
+# Upload de arquivos
+python-multipart==0.0.6
+
+# Testes
+httpx==0.28.1
+pytest==7.4.4
+
+# CORS
+# (já incluído no FastAPI)
+
+

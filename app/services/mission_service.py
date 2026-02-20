@@ -1,6 +1,13 @@
 from app.models.daily_mission import DailyMission
 from datetime import date
 from sqlalchemy.orm import Session
+from app.services.difficulty_adapter import (
+    analyze_user_performance,
+    calculate_adaptive_difficulty,
+    calculate_adaptive_xp
+)
+from app.services.focus_service import get_xp_multiplier
+import random
 
 
 # Templates de missões por área e dificuldade
@@ -213,3 +220,96 @@ def process_missions(db: Session, user_id: int) -> int:
     # Por enquanto, retorna 0
     return 0
 
+
+def generate_smart_missions(db: Session, user_id: int, area_scores: list) -> list:
+    """
+    🧠 Gera missões INTELIGENTES baseadas em:
+    - Performance do usuário (difficulty adapter)
+    - Área de foco semanal (xp multiplier)
+    - Scores atuais (priorização)
+    - Tendências (adaptação)
+
+    Returns:
+        Lista de DailyMission criadas
+    """
+
+    # 1. Analisar performance do usuário
+    performance = analyze_user_performance(db, user_id)
+
+    # 2. Determinar quantas missões gerar
+    base_missions = 5
+    if performance["recommendation"] == "decrease":
+        total_missions = 3  # Menos missões para não sobrecarregar
+    elif performance["recommendation"] == "increase":
+        total_missions = 6  # Mais missões para desafiar
+    else:
+        total_missions = base_missions
+
+    # 3. Priorizar áreas (mais fraca primeiro, depois foco)
+    sorted_areas = sorted(area_scores, key=lambda x: x.get("current", 0))
+
+    missions = []
+    today = date.today()
+
+    # Remover missões antigas do dia (se houver)
+    db.query(DailyMission).filter(
+        DailyMission.user_id == user_id,
+        DailyMission.mission_date == today
+    ).delete()
+
+    # 4. Distribuir missões entre áreas
+    for i in range(total_missions):
+        # Escolher área (priorizando as mais fracas)
+        area_index = i % len(sorted_areas)
+        area_data = sorted_areas[area_index]
+        area = area_data["area"]
+
+        # 5. Calcular dificuldade adaptativa
+        base_diff = 2 if i < 2 else 3  # Primeiras missões mais fáceis
+        difficulty = calculate_adaptive_difficulty(db, user_id, base_diff)
+
+        # 6. Escolher template baseado na dificuldade
+        if difficulty <= 2:
+            diff_key = "easy"
+        elif difficulty <= 3:
+            diff_key = "medium"
+        else:
+            diff_key = "hard"
+
+        # Buscar template aleatório da área e dificuldade
+        templates = MISSION_TEMPLATES.get(area, {}).get(diff_key, [])
+        if not templates:
+            continue
+
+        template = random.choice(templates)
+
+        # 7. Calcular XP adaptativo
+        base_xp = 30
+        xp_reward = calculate_adaptive_xp(db, user_id, base_xp, difficulty)
+
+        # 8. Aplicar multiplicador de foco (se área está em foco)
+        focus_multiplier = get_xp_multiplier(db, user_id, area)
+        xp_reward = int(xp_reward * focus_multiplier)
+
+        # 9. Criar missão
+        reason = f"Performance: {performance['level']} | Dificuldade adaptativa: {difficulty}"
+
+        mission = DailyMission(
+            user_id=user_id,
+            title=template["title"],
+            description=template["description"],
+            xp_reward=xp_reward,
+            difficulty=difficulty,
+            target_metric_value=template.get("target", 5.0),
+            mission_date=today,
+            area_name=area,
+            reason=reason,
+            completed=False
+        )
+
+        db.add(mission)
+        missions.append(mission)
+
+    db.commit()
+
+    return missions
