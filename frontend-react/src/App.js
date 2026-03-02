@@ -4,10 +4,12 @@ import './App.css';
 import './styles/designSystem.css';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import DashboardPremium from './pages/DashboardPremium';
+import HomePage from './pages/HomePage';
+import PlaceholderPage from './pages/PlaceholderPage';
 import SettingsPage from './pages/SettingsPage';
 import ProfilePage from './pages/ProfilePage';
 import HistoryPage from './pages/HistoryPage';
+import GameDashboard from './pages/GameDashboard';
 import AuthContext from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -55,13 +57,19 @@ function App() {
     <AuthContext.Provider value={{ user, token, login, logout }}>
       <Router>
         <Routes>
-          <Route path="/login" element={!token ? <LoginPage /> : <Navigate to="/dashboard" />} />
-          <Route path="/dashboard" element={<PrivateRoute><DashboardPremium /></PrivateRoute>} />
+          <Route path="/login" element={!token ? <LoginPage /> : <Navigate to="/game" />} />
+          <Route path="/game" element={<PrivateRoute><GameDashboard /></PrivateRoute>} />
+          <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} />
           <Route path="/dashboard/classic" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+          <Route path="/ranking" element={<PrivateRoute><PlaceholderPage title="Ranking" /></PrivateRoute>} />
+          <Route path="/body" element={<PrivateRoute><PlaceholderPage title="Corpo" /></PrivateRoute>} />
+          <Route path="/finance" element={<PrivateRoute><PlaceholderPage title="Financeiro" /></PrivateRoute>} />
+          <Route path="/habits" element={<PrivateRoute><PlaceholderPage title="Hábitos" /></PrivateRoute>} />
+          <Route path="/goals" element={<PrivateRoute><PlaceholderPage title="Metas" /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
           <Route path="/history" element={<PrivateRoute><HistoryPage /></PrivateRoute>} />
           <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
-          <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+          <Route path="/" element={token ? <Navigate to="/game" /> : <Navigate to="/login" />} />
         </Routes>
       </Router>
     </AuthContext.Provider>
@@ -69,4 +77,3 @@ function App() {
 }
 
 export default App;
-

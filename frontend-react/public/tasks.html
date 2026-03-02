@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas - Solo Leveling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --bg: #0a0f1b;
+            --card: #0f1623;
+            --green: #22ff88;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --orange: #ff6b35;
+            --text: #e5e7eb;
+            --text-soft: #a1a5b0;
+            --border: #1f2937;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* ====== NAVBAR ====== */
+        .navbar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 70px; 
+            background: linear-gradient(180deg, #0f172a 0%, #0a0f1b 100%); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            padding: 0 40px; 
+            z-index: 1000; 
+            gap: 40px; 
+        }
+        .logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .logo-icon { 
+            font-size: 24px; 
+            font-weight: 800; 
+            background: linear-gradient(135deg, var(--blue), var(--green)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-clip: text; 
+        }
+        .logo-text { font-size: 14px; font-weight: 700; }
+        .logo-sub { font-size: 10px; color: var(--text-soft); }
+        .nav-menu { display: flex; gap: 5px; flex: 1; }
+        .nav-menu a { 
+            text-decoration: none; 
+            color: var(--text-soft); 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            font-weight: 500; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .nav-menu a.active { background: var(--blue); color: white; }
+        .nav-menu a:hover { background: rgba(59, 130, 246, 0.3); color: var(--green); }
+        .navbar-right { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+        .avatar { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, var(--blue), var(--purple)); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: 700; 
+            cursor: pointer;
+        }
+
+        /* ====== NOTIFICATION ====== */
+        .notification { 
+            position: fixed; 
+            top: 70px; 
+            left: 0; 
+            right: 0; 
+            height: 50px; 
+            background: rgba(59, 130, 246, 0.1); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 40px; 
+            z-index: 999; 
+        }
+        .btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-primary { background: var(--blue); color: white; }
+        .btn-green { background: transparent; border: 1px solid var(--green); color: var(--green); }
+
+        /* ====== MAIN ====== */
+        .container { margin-top: 70px; padding: 30px 40px; }
+        .page-header { margin-bottom: 30px; }
+        .page-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .page-subtitle { font-size: 13px; color: var(--text-soft); }
+
+        /* ====== FILTERS ====== */
+        .filters { display: flex; gap: 10px; margin-bottom: 25px; }
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-soft);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .filter-btn:hover { background: rgba(59, 130, 246, 0.2); color: var(--green); }
+        .filter-btn.active { background: var(--blue); color: white; }
+
+        /* ====== GRID ====== */
+        .tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* ====== CARD ====== */
+        .card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            padding: 20px; 
+        }
+        .card-title { 
+            font-size: 11px; 
+            color: var(--text-soft); 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 15px; 
+        }
+
+        /* ====== INBOX ====== */
+        .inbox-form { display: flex; flex-direction: column; gap: 12px; }
+        .form-group { display: flex; gap: 10px; }
+        .inbox-input, .inbox-priority {
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .inbox-input::placeholder { color: var(--text-soft); }
+        .inbox-input:focus, .inbox-priority:focus { 
+            outline: none;
+            border-color: var(--green);
+            background: rgba(34, 255, 136, 0.05);
+        }
+        .inbox-input { flex: 1; }
+        .inbox-priority { cursor: pointer; }
+        .inbox-btn {
+            padding: 10px 16px;
+            background: var(--blue);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+        .inbox-btn:hover { background: var(--purple); }
+
+        /* ====== TASK ITEM ====== */
+        .task-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 14px; 
+            border-radius: 10px; 
+            margin-bottom: 10px; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .task-item.done { 
+            background: rgba(34, 255, 136, 0.12); 
+            border: 1px solid var(--green); 
+        }
+        .task-item.pending { 
+            background: rgba(255,255,255,0.02); 
+            border: 1px solid var(--border);
+        }
+        .task-item:hover { border-color: var(--blue); }
+
+        .task-checkbox { 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            flex-shrink: 0; 
+            font-size: 16px; 
+            font-weight: bold; 
+        }
+        .task-item.done .task-checkbox { background: var(--green); color: var(--bg); }
+        .task-item.pending .task-checkbox { background: rgba(255,255,255,0.05); border: 2px solid var(--text-soft); }
+
+        .task-content { flex: 1; }
+        .task-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .task-item.done .task-title { text-decoration: line-through; color: var(--green); }
+        .task-meta { font-size: 11px; color: var(--text-soft); }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+        .priority-alta { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+        .priority-media { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .priority-baixa { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+
+        .task-xp { color: var(--green); font-weight: 600; font-size: 12px; }
+
+        .task-actions { display: flex; gap: 8px; margin-left: 10px; }
+        .btn-remove {
+            background: transparent;
+            border: none;
+            color: var(--text-soft);
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .task-item:hover .btn-remove { opacity: 1; }
+        .btn-remove:hover { color: #ff4444; }
+
+        /* ====== PROGRESS CIRCLE ====== */
+        .progress-container { text-align: center; margin-bottom: 20px; }
+        .progress-circle {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(var(--blue) var(--progress), rgba(255,255,255,0.05) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+        }
+        .progress-inner {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .progress-percent { font-size: 36px; font-weight: 800; color: var(--blue); }
+        .progress-text { font-size: 11px; color: var(--text-soft); }
+
+        /* ====== HISTORY ====== */
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-date { color: var(--text-soft); }
+        .history-count { color: var(--green); font-weight: 600; }
+
+        /* ====== INSIGHTS ====== */
+        .insights-section { margin-top: 20px; }
+        .insight-form { margin-bottom: 20px; }
+        .insight-textarea {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 12px;
+        }
+        .insight-textarea::placeholder { color: var(--text-soft); }
+        .insight-textarea:focus { 
+            outline: none;
+            border-color: var(--green);
+            background: rgba(34, 255, 136, 0.05);
+        }
+
+        .insight-entry {
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid var(--green);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .insight-date { font-size: 10px; color: var(--text-soft); margin-bottom: 6px; }
+        .insight-text { font-size: 13px; color: var(--text); line-height: 1.4; }
+
+        /* ====== EMPTY STATE ====== */
+        .empty-state { text-align: center; padding: 30px 20px; color: var(--text-soft); }
+        .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 1200px) { .tasks-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .nav-menu { display: none; } .navbar { padding: 0 20px; } .container { padding: 20px; } }
+        @media (max-width: 600px) { .navbar { height: 60px; padding: 0 15px; } .container { margin-top: 70px; padding: 15px; } }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <div class="logo-icon">P</div>
+        <div>
+            <div class="logo-text">Solo Leveling</div>
+            <div class="logo-sub">transforme sua vida em um jogo</div>
+        </div>
+    </div>
+    <div class="nav-menu">
+        <a onclick="navigateTo('home')">🏠 Home</a>
+        <a class="active" onclick="navigateTo('tasks')">📋 Tarefas</a>
+        <a onclick="navigateTo('goals')">🎯 Metas</a>
+        <a onclick="navigateTo('habits')">🔄 Hábitos</a>
+        <a onclick="navigateTo('ranking')">🏆 Ranking</a>
+    </div>
+    <div class="navbar-right">
+        <div class="avatar" onclick="navigateTo('profile')">G</div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    <div class="page-header">
+        <div class="page-title">Tarefas</div>
+        <div class="page-subtitle" data-date-display>sexta-feira, 20 de fevereiro</div>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterTasks('today')">📅 Hoje</button>
+        <button class="filter-btn" onclick="filterTasks('week')">📊 Semana</button>
+    </div>
+
+    <div class="tasks-grid">
+        <!-- LEFT COLUMN -->
+        <div>
+            <!-- CAIXA DE ENTRADA -->
+            <div class="card">
+                <div class="card-title">📥 Caixa de Entrada</div>
+                <p style="font-size: 12px; color: var(--text-soft); margin-bottom: 15px;">Adicione uma ideia rapidamente</p>
+                
+                <div class="inbox-form">
+                    <input 
+                        type="text" 
+                        class="inbox-input" 
+                        id="taskInput" 
+                        placeholder="O que você precisa fazer?"
+                    >
+                    <div class="form-group">
+                        <select class="inbox-priority" id="prioritySelect" style="flex: 1;">
+                            <option value="baixa">🟢 Baixa</option>
+                            <option value="media" selected>🟡 Média</option>
+                            <option value="alta">🔴 Alta</option>
+                        </select>
+                        <button class="inbox-btn" onclick="addTask()">✚ Adicionar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MINHAS TAREFAS -->
+            <div class="card" style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div class="card-title" style="margin-bottom: 0;">Minhas Tarefas</div>
+                    <span style="font-size: 12px; color: var(--text-soft);" data-task-counter>0/0</span>
+                </div>
+                <div data-tasks-list>
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p style="font-size: 12px;">Nenhuma tarefa adicionada</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INSIGHTS / DIÁRIO -->
+            <div class="card insights-section">
+                <div class="card-title">💡 Insights & Diário</div>
+                <div class="insight-form">
+                    <textarea 
+                        class="insight-textarea" 
+                        id="insightInput"
+                        placeholder="📔 Escreva seus pensamentos, aprendizados e observações do dia..."
+                    ></textarea>
+                    <button class="inbox-btn" onclick="addInsight()" style="width: 100%;">💾 Salvar Insight</button>
+                </div>
+                <div data-insights-list></div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+            <!-- PROGRESSO DO DIA -->
+            <div class="card">
+                <div class="card-title">Progresso do Dia</div>
+                <div class="progress-container">
+                    <div class="progress-circle" style="--progress: 0%">
+                        <div class="progress-inner">
+                            <div class="progress-percent" data-progress-percent>0%</div>
+                            <div class="progress-text">Tarefas</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-soft);">
+                        <div data-progress-text>0 de 0 concluídas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTÓRICO -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-title">Histórico de Tarefas</div>
+                <div data-history-list>
+                    <div class="empty-state">
+                        <p style="font-size: 12px;">Nenhuma tarefa concluída</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = 'http://localhost:8000';
+    const USER_ID = 1;
+    const STORAGE_KEY = 'sololeveling_tasks';
+    const INSIGHTS_KEY = 'sololeveling_insights';
+
+    let tasks = [];
+    let insights = [];
+    let currentFilter = 'today';
+
+    // ====== INICIALIZAR ======
+    document.addEventListener('DOMContentLoaded', () => {
+        loadTasks();
+        loadInsights();
+        updateDateDisplay();
+        renderTasks();
+        renderInsights();
+        
+        // Recarregar tarefas se voltou do dashboard
+        if (sessionStorage.getItem('reloadTasks')) {
+            loadTasks();
+            renderTasks();
+            sessionStorage.removeItem('reloadTasks');
+        }
+        
+        // Enter key para adicionar tarefa
+        document.getElementById('taskInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+        
+        // Enter key para adicionar insight
+        document.getElementById('insightInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) addInsight();
+        });
+    });
+
+    // ====== CARREGAR TAREFAS ======
+    function loadTasks() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            tasks = JSON.parse(stored);
+        } else {
+            // Tarefas padrão
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            tasks = [
+                { id: 1, title: 'Estudar por 2h', priority: 'alta', xp: 200, completed: false, date: today },
+                { id: 2, title: 'Exercício matinal', priority: 'media', xp: 150, completed: true, date: today },
+                { id: 3, title: 'Meditar 10min', priority: 'baixa', xp: 100, completed: false, date: today },
+                { id: 4, title: 'Ler 30min', priority: 'media', xp: 120, completed: true, date: today },
+            ];
+            saveTasks();
+        }
+    }
+
+    // ====== SALVAR TAREFAS ======
+    function saveTasks() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    // ====== ADICIONAR TAREFA ======
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        const priority = document.getElementById('prioritySelect').value;
+        const title = input.value.trim();
+
+        if (!title) {
+            alert('Por favor, digite uma tarefa');
+            return;
+        }
+
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const newTask = {
+            id: Date.now(),
+            title: title,
+            priority: priority,
+            xp: priority === 'alta' ? 200 : priority === 'media' ? 150 : 100,
+            completed: false,
+            date: today
+        };
+
+        console.log('✅ Nova tarefa criada:', newTask);
+        tasks.push(newTask);
+        saveTasks();
+        console.log('💾 Tarefa salva no localStorage:', localStorage.getItem(STORAGE_KEY));
+        renderTasks();
+
+        input.value = '';
+        input.focus();
+    }
+
+    // ====== ALTERNAR TAREFA ======
+    function toggleTask(taskId) {
+        const task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.completed = !task.completed;
+            saveTasks();
+            renderTasks();
+        }
+    }
+
+    // ====== REMOVER TAREFA ======
+    function removeTask(taskId) {
+        tasks = tasks.filter(t => t.id !== taskId);
+        saveTasks();
+        renderTasks();
+    }
+
+    // ====== RENDERIZAR TAREFAS ======
+    function renderTasks() {
+        const container = document.querySelector('[data-tasks-list]');
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        
+        let filteredTasks = tasks.filter(t => {
+            if (currentFilter === 'today') {
+                return t.date === today;
+            }
+            return true;
+        });
+
+        if (filteredTasks.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📝</div>
+                    <p style="font-size: 12px;">Nenhuma tarefa para ${currentFilter === 'today' ? 'hoje' : 'esta semana'}</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = filteredTasks.map(task => `
+                <div class="task-item ${task.completed ? 'done' : 'pending'}" onclick="toggleTask(${task.id})">
+                    <div class="task-checkbox">
+                        ${task.completed ? '✓' : ''}
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-meta">
+                            <span class="priority-badge priority-${task.priority}">
+                                ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                            </span>
+                            <span>+${task.xp} XP</span>
+                        </div>
+                    </div>
+                    <div class="task-xp">${task.completed ? '✅' : ''}</div>
+                </div>
+            `).join('');
+        }
+
+        // Atualizar contador e progresso
+        updateProgress(filteredTasks);
+    }
+
+    // ====== ATUALIZAR PROGRESSO ======
+    function updateProgress(filteredTasks) {
+        const completed = filteredTasks.filter(t => t.completed).length;
+        const total = filteredTasks.length;
+        const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+        document.querySelector('[data-task-counter]').textContent = `${completed}/${total}`;
+        document.querySelector('[data-progress-percent]').textContent = `${percent}%`;
+        document.querySelector('[data-progress-text]').textContent = `${completed} de ${total} concluídas`;
+        document.querySelector('.progress-circle').style.setProperty('--progress', `${percent * 3.6}deg`);
+    }
+
+    // ====== FILTRAR TAREFAS ======
+    function filterTasks(filter) {
+        currentFilter = filter;
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        renderTasks();
+    }
+
+    // ====== CARREGAR INSIGHTS ======
+    function loadInsights() {
+        const stored = localStorage.getItem(INSIGHTS_KEY);
+        if (stored) {
+            insights = JSON.parse(stored);
+        }
+    }
+
+    // ====== SALVAR INSIGHTS ======
+    function saveInsights() {
+        localStorage.setItem(INSIGHTS_KEY, JSON.stringify(insights));
+    }
+
+    // ====== ADICIONAR INSIGHT ======
+    function addInsight() {
+        const input = document.getElementById('insightInput');
+        const text = input.value.trim();
+
+        if (!text) {
+            alert('Por favor, escreva algo');
+            return;
+        }
+
+        const newInsight = {
+            id: Date.now(),
+            text: text,
+            date: new Date().toLocaleString('pt-BR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        };
+
+        insights.unshift(newInsight);
+        saveInsights();
+        renderInsights();
+
+        input.value = '';
+        input.focus();
+    }
+
+    // ====== RENDERIZAR INSIGHTS ======
+    function renderInsights() {
+        const container = document.querySelector('[data-insights-list]');
+
+        if (insights.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state" style="padding: 20px 0;">
+                    <p style="font-size: 12px;">Comece a registrar seus pensamentos e aprendizados</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = insights.map(insight => `
+                <div class="insight-entry">
+                    <div class="insight-date">📅 ${insight.date}</div>
+                    <div class="insight-text">${insight.text.replace(/\n/g, '<br>')}</div>
+                    <button 
+                        style="
+                            background: transparent;
+                            border: none;
+                            color: var(--text-soft);
+                            cursor: pointer;
+                            font-size: 11px;
+                            margin-top: 8px;
+                            transition: 0.3s;
+                        "
+                        onclick="removeInsight(${insight.id})"
+                        onmouseover="this.style.color='#ff4444'"
+                        onmouseout="this.style.color='var(--text-soft)'"
+                    >
+                        🗑️ Remover
+                    </button>
+                </div>
+            `).join('');
+        }
+    }
+
+    // ====== REMOVER INSIGHT ======
+    function removeInsight(id) {
+        insights = insights.filter(i => i.id !== id);
+        saveInsights();
+        renderInsights();
+    }
+
+    // ====== ATUALIZAR DATA ======
+    function updateDateDisplay() {
+        const today = new Date();
+        const dateStr = today.toLocaleString('pt-BR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        document.querySelector('[data-date-display]').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    }
+
+    // ====== NAVEGAÇÃO ======
+    function navigateTo(page) {
+        if (page === 'home') {
+            window.location.href = 'dashboard.html';
+        } else if (page === 'tasks') {
+            window.location.href = 'tasks.html';
+        } else if (page === 'profile') {
+            alert('Página de perfil em breve');
+        } else {
+            alert(`Página de ${page} em breve`);
+        }
+    }
+</script>
+
+</body>
+</html>

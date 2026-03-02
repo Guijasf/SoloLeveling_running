@@ -5,7 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7d55fd9-bc33-4413-bb74-aa373259256e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/COMO_INICIAR.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/START.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/START.ps1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/AreaScoreCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/AreaScoreCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/GoalProgressCard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/GoalProgressCard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/WeeklyEvolutionChart.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/WeeklyEvolutionChart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/HomePage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/HomePage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/PlaceholderPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend-react/src/pages/PlaceholderPage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/premium/PremiumHeader.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/PremiumHeader.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/premium/PremiumHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/premium/PremiumHeader.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +108,12 @@
       <workItem from="1771595176250" duration="3983000" />
       <workItem from="1771599438648" duration="808000" />
       <workItem from="1771606139228" duration="2003000" />
-      <workItem from="1771608388220" duration="2974000" />
+      <workItem from="1771608388220" duration="3464000" />
+      <workItem from="1771854360257" duration="111000" />
+      <workItem from="1771854508737" duration="3535000" />
+      <workItem from="1771941473356" duration="3950000" />
+      <workItem from="1771952170602" duration="1112000" />
+      <workItem from="1771953331058" duration="1211000" />
     </task>
     <servers />
   </component>

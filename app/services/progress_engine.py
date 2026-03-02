@@ -8,7 +8,12 @@ from app.services.scoring_service import (
 )
 from app.services.level_system import calculate_level
 from app.services.rank_service import calculate_rank
-from app.services.streak_service import update_streak
+from app.services.streak_service import (
+    update_streak,
+    get_streak_multiplier,
+    get_streak_bonus_xp,
+    check_streak_milestone
+)
 from app.services.mission_service import process_missions, generate_dynamic_missions
 from app.services.focus_service import get_current_focus
 from app.services.achievement_service import check_and_unlock_achievements
@@ -24,7 +29,7 @@ def process_user_progress(db: Session, user_id: int, new_log=None):
     - Atualizar XP
     - Calcular e atualizar Level
     - Calcular e atualizar Rank
-    - Processar multiplicadores de foco
+    - Processar multiplicadores (foco, streak)
     - Atualizar streak
 
     Args:
@@ -54,12 +59,18 @@ def process_user_progress(db: Session, user_id: int, new_log=None):
     # 3️⃣ Atualizar streak
     update_streak(progress)
 
-    # 4️⃣ Calcular XP baseado no novo log (COM multiplicador de foco)
+    # 4️⃣ Calcular XP baseado no novo log (COM multiplicadores de foco + streak)
     xp_gain = _calculate_xp_gain(new_log, area_scores, progress, db, user_id)
     progress.xp += xp_gain
 
+    # 4️⃣.1 Verificar e aplicar bônus de milestone de streak
+    streak_milestone = check_streak_milestone(progress)
+    if streak_milestone["milestone_reached"]:
+        progress.xp += streak_milestone["bonus_xp"]
+
     # 5️⃣ Processar missões (pode dar XP extra)
-    mission_bonus = process_missions(db, user_id)
+    mission_result = process_missions(db, user_id)
+    mission_bonus = mission_result.get("total_xp_with_bonus", 0)
     progress.xp += mission_bonus
 
     # 6️⃣ Gerar missões dinâmicas para hoje (se não existem)
@@ -83,6 +94,7 @@ def process_user_progress(db: Session, user_id: int, new_log=None):
         "area_scores": area_scores,
         "life_score": life_score,
         "xp_gain": xp_gain,
+        "streak_bonus": streak_milestone.get("bonus_xp", 0),
         "mission_bonus": mission_bonus,
         "achievement_bonus": achievement_bonus,
         "new_achievements": [{"title": ach.title, "icon": ach.icon, "xp": ach.xp_reward} for ach in new_achievements],
@@ -90,7 +102,8 @@ def process_user_progress(db: Session, user_id: int, new_log=None):
         "xp": progress.xp,
         "level": progress.level,
         "rank": progress.rank,
-        "streak": progress.current_streak if hasattr(progress, 'current_streak') else 0
+        "streak": progress.current_streak if hasattr(progress, 'current_streak') else 0,
+        "streak_milestone": streak_milestone if streak_milestone["milestone_reached"] else None
     }
 
 
@@ -98,7 +111,9 @@ def _calculate_xp_gain(new_log, area_scores, progress, db=None, user_id=None):
     """
     Calcula XP ganho baseado no novo log e scores atuais.
 
-    Aplica multiplicador de foco semanal se o usuário está focando em uma área.
+    Aplica multiplicadores de:
+    - Foco semanal (1.5x)
+    - Streak (1.1x a 1.5x)
     """
     if not new_log:
         # Se não houver novo log, usa score médio
@@ -111,8 +126,8 @@ def _calculate_xp_gain(new_log, area_scores, progress, db=None, user_id=None):
     log_value = new_log.value if hasattr(new_log, 'value') else 0
     base_xp = max(1, int(log_value * 3))
 
-    # ✨ NOVO: Aplicar multiplicador de foco semanal (1.5x)
-    multiplier = 1.0
+    # ✨ Multiplicador de FOCO semanal (1.5x)
+    focus_multiplier = 1.0
     if db and user_id and hasattr(new_log, 'metric_type_id'):
         try:
             from app.models.metric_type import MetricType
@@ -131,12 +146,17 @@ def _calculate_xp_gain(new_log, area_scores, progress, db=None, user_id=None):
 
                 if area:
                     # Obter multiplicador (1.5 se focando, 1.0 senão)
-                    multiplier = get_xp_multiplier(db, user_id, area.name)
+                    focus_multiplier = get_xp_multiplier(db, user_id, area.name)
         except:
-            multiplier = 1.0
+            focus_multiplier = 1.0
 
-    final_xp = int(base_xp * multiplier)
+    # ✨ Multiplicador de STREAK (1.1x a 1.5x)
+    streak_multiplier = get_streak_multiplier(progress.current_streak)
+
+    # 🎯 XP Final = base × foco × streak
+    final_xp = int(base_xp * focus_multiplier * streak_multiplier)
     return final_xp
+
 
 
 def _update_dynamic_missions(db: Session, user_id: int, area_scores: list, progress):

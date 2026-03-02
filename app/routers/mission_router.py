@@ -78,19 +78,47 @@ def get_today_missions(user_id: int, db: Session = Depends(get_db)):
 @router.post("/{mission_id}/complete")
 def complete_mission(mission_id: int, db: Session = Depends(get_db)):
     """Marca missão como completa"""
+    from datetime import date
     mission = db.query(DailyMission).filter(DailyMission.id == mission_id).first()
 
     if not mission:
         return {"error": "Missão não encontrada"}
 
+    if mission.completed:
+        return {"error": "Missão já foi completada"}
+
     mission.completed = True
+    mission.completed_at = date.today()
     db.commit()
 
     return {
         "status": "completed",
         "mission_id": mission_id,
         "xp_reward": mission.xp_reward,
-        "title": mission.title
+        "title": mission.title,
+        "message": f"✅ Missão completada! +{mission.xp_reward} XP"
+    }
+
+
+@router.get("/{user_id}/process-today")
+def process_today_missions(user_id: int, db: Session = Depends(get_db)):
+    """
+    Processa todas as missões completadas de HOJE.
+    
+    Retorna:
+    - Total XP ganho
+    - Bônus de streak
+    - Taxa de conclusão
+    - Detalhes de cada missão
+    """
+    from app.services.mission_service import process_missions
+    
+    result = process_missions(db, user_id)
+    
+    return {
+        "user_id": user_id,
+        "date": date.today(),
+        **result
     }
 
 
@@ -126,3 +154,4 @@ def generate_smart_missions_endpoint(user_id: int, db: Session = Depends(get_db)
         "missions": missions,
         "total": len(missions)
     }
+

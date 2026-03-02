@@ -1,0 +1,50 @@
+.weekly-evolution-card {
+  grid-column: span 2;
+  min-height: 300px;
+}
+
+.chart-container {
+  position: relative;
+  height: 250px;
+  padding: 20px 10px;
+}
+
+.chart-grid {
+  position: absolute;
+  inset: 20px 10px;
+  pointer-events: none;
+}
+
+.grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.grid-label {
+  position: absolute;
+  left: -30px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.line-chart {
+  position: relative;
+  height: 100%;
+}
+
+.chart-point {
+  filter: drop-shadow(0 0 4px currentColor);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.chart-point:hover {
+  r: 8;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+

@@ -209,16 +209,93 @@ def generate_dynamic_missions(db: Session, user_id: int, context: dict):
     return missions
 
 
-def process_missions(db: Session, user_id: int) -> int:
+def process_missions(db: Session, user_id: int) -> dict:
     """
-    Processa missões completadas e retorna XP total ganho.
+    Processa missões completadas e retorna estatísticas.
 
-    Verifica se há missões completadas desde última chamada
-    e retorna o bônus XP total.
+    Verificações:
+    - Busca missões completadas de hoje
+    - Calcula XP total ganho
+    - Valida progresso (se meta atingida)
+    - Retorna resultado
+
+    Returns:
+        {
+            "total_xp": 150,
+            "missions_completed": 3,
+            "missions_today": 5,
+            "bonus_streak": 25,
+            "details": [...]
+        }
     """
-    # TODO: Implementar lógica de detecção de missões completadas
-    # Por enquanto, retorna 0
-    return 0
+    from datetime import date, timedelta
+    from app.models.user_progress import UserProgress
+    
+    today = date.today()
+    
+    # 1. Buscar todas as missões de hoje
+    today_missions = db.query(DailyMission).filter(
+        DailyMission.user_id == user_id,
+        DailyMission.mission_date == today
+    ).all()
+    
+    if not today_missions:
+        return {
+            "total_xp": 0,
+            "missions_completed": 0,
+            "missions_today": 0,
+            "bonus_streak": 0,
+            "details": []
+        }
+    
+    # 2. Separar completadas de pendentes
+    completed_missions = [m for m in today_missions if m.completed]
+    
+    if not completed_missions:
+        return {
+            "total_xp": 0,
+            "missions_completed": len(completed_missions),
+            "missions_today": len(today_missions),
+            "bonus_streak": 0,
+            "details": []
+        }
+    
+    # 3. Calcular XP total
+    total_xp = sum(m.xp_reward for m in completed_missions)
+    
+    # 4. Calcular bônus de streak
+    progress = db.query(UserProgress).filter(UserProgress.user_id == user_id).first()
+    bonus_streak = 0
+    
+    if progress:
+        if progress.current_streak >= 7:
+            bonus_streak = int(total_xp * 0.2)  # 20% bônus por semana
+        elif progress.current_streak >= 30:
+            bonus_streak = int(total_xp * 0.3)  # 30% bônus por mês
+        elif progress.current_streak >= 100:
+            bonus_streak = int(total_xp * 0.5)  # 50% bônus por 100 dias!
+    
+    # 5. Compilar detalhes
+    details = []
+    for mission in completed_missions:
+        details.append({
+            "mission_id": mission.id,
+            "title": mission.title,
+            "area": mission.area_name,
+            "xp": mission.xp_reward,
+            "difficulty": mission.difficulty,
+            "completed_at": mission.completed_at or today
+        })
+    
+    return {
+        "total_xp": total_xp,
+        "bonus_streak": bonus_streak,
+        "total_xp_with_bonus": total_xp + bonus_streak,
+        "missions_completed": len(completed_missions),
+        "missions_today": len(today_missions),
+        "completion_rate": round((len(completed_missions) / len(today_missions)) * 100, 1),
+        "details": details
+    }
 
 
 def generate_smart_missions(db: Session, user_id: int, area_scores: list) -> list:

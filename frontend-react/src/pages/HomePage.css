@@ -1,0 +1,87 @@
+.home-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0B0F1A 0%, #1a1f2e 100%);
+  padding-bottom: 3rem;
+}
+
+.loading-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+}
+
+.welcome-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 2rem 0;
+}
+
+.welcome-title {
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+.user-name-highlight {
+  color: #e2e8f0;
+}
+
+.home-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.home-left-column,
+.home-center-column,
+.home-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-center-column {
+    order: 2;
+  }
+
+  .home-right-column {
+    order: 3;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-section {
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .home-grid {
+    padding: 1.5rem;
+  }
+
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

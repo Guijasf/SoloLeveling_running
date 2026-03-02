@@ -147,6 +147,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .nav-btn {
@@ -241,4 +243,3 @@
     font-size: 1.1rem;
   }
 }
-

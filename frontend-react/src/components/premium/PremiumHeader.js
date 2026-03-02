@@ -56,13 +56,21 @@ function PremiumHeader({ userName, level, rank, xp, nextLevelXp, xpPercentage })
         </div>
 
         <div className="header-right">
-          <button className="nav-btn" onClick={() => navigate('/habits')}>
-            <span className="nav-icon">📊</span>
-            <span className="nav-label">Hábitos</span>
-          </button>
           <button className="nav-btn" onClick={() => navigate('/ranking')}>
             <span className="nav-icon">🏆</span>
             <span className="nav-label">Ranking</span>
+          </button>
+          <button className="nav-btn" onClick={() => navigate('/body')}>
+            <span className="nav-icon">🏋️</span>
+            <span className="nav-label">Corpo</span>
+          </button>
+          <button className="nav-btn" onClick={() => navigate('/finance')}>
+            <span className="nav-icon">💰</span>
+            <span className="nav-label">Financeiro</span>
+          </button>
+          <button className="nav-btn" onClick={() => navigate('/habits')}>
+            <span className="nav-icon">📊</span>
+            <span className="nav-label">Hábitos</span>
           </button>
           <button className="nav-btn" onClick={() => navigate('/goals')}>
             <span className="nav-icon">🎯</span>
@@ -80,4 +88,3 @@ function PremiumHeader({ userName, level, rank, xp, nextLevelXp, xpPercentage })
 }
 
 export default PremiumHeader;
-

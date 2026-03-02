@@ -11,7 +11,9 @@ from app.routers.dashboard_router import router as dashboard_router
 from app.routers.profile_router import router as profile_router
 from app.routers.history_router import router as history_router
 from app.routers.notification_router import router as notification_router
-from app.routers.insights_router import router as insights_router
+from app.routers.streak_router import router as streak_router
+from app.routers.public_router import router as public_router
+# Insights router será importado abaixo com os demais
 
 app = FastAPI(title="SoloLeveling - RPG de Vida Real", version="3.0.0")
 
@@ -29,6 +31,9 @@ Base.metadata.create_all(bind=engine)
 # 🔐 Auth Router (SEMPRE PRIMEIRO)
 app.include_router(auth_router)
 
+# 🌐 Public API (SEM AUTENTICAÇÃO - para dashboard)
+app.include_router(public_router)
+
 # 📊 Dashboard consolidado (PROTEGIDO)
 app.include_router(dashboard_router)
 
@@ -41,7 +46,11 @@ app.include_router(history_router)
 # 🔔 Notificações
 app.include_router(notification_router)
 
+# 🔥 Streak e Sequências
+app.include_router(streak_router)
+
 # 📊 Insights e Performance
+from app.routers.insights_router import router as insights_router
 app.include_router(insights_router)
 
 # Demais routers

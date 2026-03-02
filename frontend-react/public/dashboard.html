@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solo Leveling Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+<style>
+:root {
+  --bg: #0a0f1b;
+  --card: #0f1623;
+  --green: #22ff88;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --orange: #ff6b35;
+  --text: #e5e7eb;
+  --text-soft: #a1a5b0;
+  --border: #1f2937;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ====== NAVBAR ====== */
+.navbar { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: linear-gradient(180deg, #0f172a 0%, #0a0f1b 100%); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 40px; z-index: 1000; gap: 40px; }
+.logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.logo-icon { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.logo-text { font-size: 14px; font-weight: 700; }
+.logo-sub { font-size: 10px; color: var(--text-soft); }
+.nav-menu { display: flex; gap: 5px; flex: 1; }
+.nav-menu a { text-decoration: none; color: var(--text-soft); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.3s; }
+.nav-menu a.active { background: var(--blue); color: white; }
+.nav-menu a:hover { background: rgba(59, 130, 246, 0.3); color: var(--green); }
+.navbar-right { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+
+/* ====== NOTIFICATION ====== */
+.notification { position: fixed; top: 70px; left: 0; right: 0; height: 50px; background: rgba(59, 130, 246, 0.1); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; z-index: 999; }
+.btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.btn-primary { background: var(--blue); color: white; }
+.btn-green { background: transparent; border: 1px solid var(--green); color: var(--green); }
+
+/* ====== MAIN ====== */
+.container { margin-top: 120px; padding: 30px 40px; }
+.progress-today { display: flex; justify-content: flex-end; margin-bottom: 30px; font-size: 14px; color: var(--text-soft); }
+.grid-3 { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 20px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+.card.gradient { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1)); }
+.card-title { font-size: 11px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+
+/* ====== XP BAR ====== */
+.xp-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-bottom: 5px; }
+.xp-progress { height: 100%; background: linear-gradient(90deg, var(--blue), #0ea5e9); border-radius: 10px; animation: shimmer 2s infinite; }
+@keyframes shimmer { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+
+/* ====== TAREFAS ====== */
+.task-item { display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 12px; margin-bottom: 12px; }
+.task-item.done { background: rgba(34, 255, 136, 0.12); border: 1px solid var(--green); }
+.task-item.pending { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); opacity: 0.7; }
+.task-check { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; font-weight: bold; }
+.task-item.done .task-check { background: var(--green); color: var(--bg); }
+.task-item.pending .task-check { background: rgba(255,255,255,0.05); border: 2px solid var(--text-soft); color: var(--text-soft); }
+
+/* ====== BADGES ====== */
+.badges { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.badge { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; text-align: center; }
+.badge-icon { font-size: 20px; margin-bottom: 8px; }
+.badge-value { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+.badge-label { font-size: 10px; color: var(--text-soft); }
+
+/* ====== STREAK ====== */
+.streak-number { font-size: 64px; font-weight: 800; color: var(--orange); text-shadow: 0 0 40px rgba(255, 107, 53, 0.6); margin: 15px 0; }
+.streak-box { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+
+/* ====== CHART ====== */
+.chart-container { height: 200px; margin: 15px 0; }
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 1200px) { .grid-3 { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .nav-menu { display: none; } .navbar { padding: 0 20px; } .container { padding: 20px; } }
+@media (max-width: 600px) { .navbar { height: 60px; padding: 0 15px; } .notification { height: 40px; padding: 0 15px; } .container { margin-top: 100px; } }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <div class="logo-icon">P</div>
+    <div>
+      <div class="logo-text">Solo Leveling</div>
+      <div class="logo-sub">transforme sua vida em um jogo</div>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a class="active" onclick="navigateTo('home')">🏠 Home</a>
+    <a onclick="navigateTo('tasks')">📋 Tarefas</a>
+    <a onclick="navigateTo('goals')">🎯 Metas</a>
+    <a onclick="navigateTo('habits')">🔄 Hábitos</a>
+    <a onclick="navigateTo('ranking')">🏆 Ranking</a>
+    <a onclick="navigateTo('login')">👤 Login</a>
+  </div>
+  <div class="navbar-right">
+    <div class="avatar" style="cursor: pointer;" onclick="navigateTo('profile')">G</div>
+  </div>
+</div>
+
+<!-- NOTIFICATION BANNER -->
+<div class="notification">
+  <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-soft);">
+    <span>🔔</span>Ative notificações para lembretes diários
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;">Ativar</button>
+    <button class="btn btn-green" style="padding: 8px 16px; font-size: 12px;">⬇️ Instalar App</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+  <div class="progress-today">Hoje: <strong style="color: var(--blue); margin-left: 5px;">60%</strong></div>
+
+  <!-- GRID 3 COLUNAS -->
+  <div class="grid-3">
+
+    <!-- COL 1: STATUS -->
+    <div>
+      <div class="card gradient" style="margin-bottom: 20px;">
+        <div class="card-title">STATUS DO JOGADOR</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+          <div>
+            <div style="font-size: 28px; font-weight: 800; margin-bottom: 8px;" data-level>Nível 10</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 14px;">👑</span>
+              <span style="font-size: 13px; color: var(--text-soft);" data-username>Guerreiro</span>
+            </div>
+          </div>
+          <div style="font-size: 32px;">⚡</div>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px;">
+            <span>XP</span>
+            <span style="color: var(--blue); font-weight: 700;" data-xp>1415 / 2700</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-progress" data-xp-bar style="width: 52%;"></div>
+          </div>
+          <div style="font-size: 10px; color: var(--text-soft); margin-top: 5px;">Total: 10115 XP</div>
+        </div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-bottom: 15px; font-size: 11px; color: var(--text-soft);">NÃO PARE: VOCÊ ESTÁ CONSOLIDANDO HÁBITOS</div>
+        <div class="badges">
+          <div class="badge" style="border: 1px solid var(--purple);">
+            <div class="badge-icon">⚔️</div>
+            <div class="badge-value">Guerreiro</div>
+            <div class="badge-label">Classe</div>
+          </div>
+          <div class="badge" style="border: 1px solid var(--blue);">
+            <div class="badge-icon">⚡</div>
+            <div class="badge-value">10115</div>
+            <div class="badge-label">XP Total</div>
+          </div>
+          <div class="badge" style="border: 1px solid var(--orange);">
+            <div class="badge-icon">💎</div>
+            <div class="badge-value">25</div>
+            <div class="badge-label">Cristais</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Gráfico Pentágono (Radar) -->
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-title">ÁREAS DE VIDA</div>
+        <div style="height: 250px;">
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="card-title">SEQUÊNCIA DE HÁBITOS</div>
+        <div class="streak-number" data-streak>15</div>
+        <div style="font-size: 12px; color: var(--text-soft); margin-bottom: 20px;">dias consecutivos</div>
+        <div class="streak-box">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; color: var(--text-soft);">
+            <span>Próximo nível: Ouro</span>
+            <span>5 dias restantes</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-progress" style="width: 75%;"></div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: var(--text-soft); font-style: italic; margin-bottom: 8px;">Cumpra seus hábitos e não deixe a sequência morrer!</div>
+        <div style="font-size: 10px; color: var(--blue); font-weight: 700;">Progresso base: 0% (precisa 70%)</div>
+      </div>
+    </div>
+
+    <!-- COL 2: TAREFAS -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">TAREFAS DO DIA</div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--text-soft);" data-tasks-count>3/5</div>
+      </div>
+      <div data-tasks-container>
+        <!-- Tarefas carregadas via API -->
+      </div>
+    </div>
+
+    <!-- COL 3: EVOLUÇÃO E METAS -->
+    <div>
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-title">EVOLUÇÃO SEMANAL</div>
+        <div class="chart-container">
+          <canvas id="weekChart"></canvas>
+        </div>
+        <div style="font-size: 11px; color: var(--text-soft); text-align: center; font-style: italic;">"Mais um passo neste ao seu pico"</div>
+      </div>
+      <div class="card" style="margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <div class="card-title">META FINANCEIRA</div>
+          <div style="font-size: 16px;">💰</div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform: rotate(-90deg);">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="url(#gradBlue)" stroke-width="8" stroke-linecap="round" style="stroke-dasharray: 339.292; stroke-dashoffset: 64.5;"/>
+            <defs><linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#0ea5e9"/></linearGradient></defs>
+            <text x="60" y="65" text-anchor="middle" style="font-size: 28px; font-weight: 800; fill: #3b82f6;">81%</text>
+          </svg>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 12px; text-align: center;">
+          <div style="font-size: 11px; color: var(--text-soft);">8.058 R$ / 10.000 R$</div>
+          <div style="font-size: 10px; color: var(--text-soft);">Reserva de emergência</div>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 10px;">+ Registrar Ganho</button>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <div class="card-title">META DE PESO</div>
+          <div style="font-size: 16px;">⚖️</div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform: rotate(-90deg);">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="url(#gradGreen)" stroke-width="8" stroke-linecap="round" style="stroke-dasharray: 339.292; stroke-dashoffset: 40.7;"/>
+            <defs><linearGradient id="gradGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#22ff88"/><stop offset="100%" style="stop-color:#10b981"/></linearGradient></defs>
+            <text x="60" y="65" text-anchor="middle" style="font-size: 28px; font-weight: 800; fill: #22ff88;">88%</text>
+          </svg>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 12px; text-align: center;">
+          <div style="font-size: 11px; color: var(--text-soft);">71 kg / 72 kg</div>
+          <div style="font-size: 10px; color: var(--text-soft);">Peso ideal</div>
+        </div>
+        <button class="btn btn-green" style="width: 100%; padding: 10px;">– Atualizar Peso</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API_BASE = 'http://localhost:8000';
+const USER_ID = 1; // User padrão, depois será dinâmico com login
+const STORAGE_KEY = 'sololeveling_tasks'; // Mesmo key da página de tarefas
+
+// ====== ESTADO GLOBAL ======
+let userData = null;
+let missionsData = [];
+let streakData = null;
+let scoringData = null;
+
+// ====== NAVEGAÇÃO (Definida antes do HTML) ======
+function navigateTo(page) {
+  if (page === 'home') {
+    window.location.href = 'dashboard.html';
+  } else if (page === 'tasks') {
+    console.log('🚀 Navegando para tasks.html');
+    sessionStorage.setItem('reloadTasks', 'true');
+    window.location.href = 'tasks.html';
+  } else if (page === 'profile') {
+    alert(`Perfil de ${userData?.username || 'Jogador'} - Nível ${userData?.level || 10}`);
+  } else {
+    console.log(`📍 Abrindo ${page}...`);
+    alert(`Abrindo ${page}...`);
+  }
+}
+
+// ====== INICIALIZAR DASHBOARD ======
+async function initDashboard() {
+  try {
+    console.log('📊 Iniciando dashboard...', new Date().toLocaleTimeString());
+    
+    // Buscar todos os dados em paralelo (endpoints públicos)
+    // Usar .catch para cada fetch para que erros não quebrem o dashboard todo
+    const [user, missions, streak, scoring] = await Promise.all([
+      fetch(`${API_BASE}/public/users/${USER_ID}`).then(r => {
+        console.log('✅ User loaded:', r.status);
+        return r.json();
+      }).catch(e => {
+        console.warn('⚠️ User error:', e);
+        return { level: 10, username: 'Jogador', current_xp: 0, next_level_xp: 2700 };
+      }),
+      fetch(`${API_BASE}/public/missions/${USER_ID}`).then(r => {
+        console.log('✅ Missions loaded:', r.status);
+        return r.json();
+      }).catch(e => {
+        console.warn('⚠️ Missions error:', e);
+        return [];
+      }),
+      fetch(`${API_BASE}/public/streak/${USER_ID}`).then(r => {
+        console.log('✅ Streak loaded:', r.status);
+        return r.json();
+      }).catch(e => {
+        console.warn('⚠️ Streak error:', e);
+        return { current_streak: 0, best_streak: 0, multiplier: 1.0 };
+      }),
+      fetch(`${API_BASE}/public/scoring/${USER_ID}`).then(r => {
+        console.log('✅ Scoring loaded:', r.status);
+        return r.json();
+      }).catch(e => {
+        console.warn('⚠️ Scoring error:', e);
+        return { area_scores: { 'Saúde': 50, 'Trabalho': 50, 'Relacionamentos': 50, 'Diversão': 50, 'Finanças': 50 } };
+      })
+    ]);
+    
+    console.log('📈 Dados recebidos:', { user, missions, streak, scoring });
+    
+    userData = user;
+    missionsData = Array.isArray(missions) ? missions : missions.missions || [];
+    streakData = streak;
+    scoringData = scoring;
+    
+    // Renderizar dados
+    renderUserData();
+    renderMissions();
+    renderStreak();
+    renderScoring();
+    
+    // Renderizar gráfico de evolução semanal
+    renderWeekChart();
+    
+    console.log('✅ Dashboard carregado com sucesso!');
+  } catch (error) {
+    console.error('❌ Erro ao carregar dashboard:', error);
+  }
+}
+
+// ====== RENDERIZAR GRÁFICO SEMANAL ======
+function renderWeekChart() {
+  const weekCtx = document.getElementById('weekChart');
+  if (!weekCtx) {
+    console.warn('⚠️ Canvas weekChart não encontrado');
+    return;
+  }
+  
+  // Destruir gráfico anterior se existe
+  if (window.weekChartInstance) {
+    window.weekChartInstance.destroy();
+  }
+  
+  window.weekChartInstance = new Chart(weekCtx, {
+    type: 'line',
+    data: {
+      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'],
+      datasets: [{
+        label: 'XP',
+        data: [0, 25, 50, 75, 50, 100, 100],
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true,
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#3b82f6',
+        pointBorderColor: '#0a0f1b'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a1a5b0' } },
+        x: { grid: { display: false }, ticks: { color: '#a1a5b0' } }
+      }
+    }
+  });
+}
+
+// ====== RENDERIZAR DADOS DO USUÁRIO ======
+function renderUserData() {
+  if (!userData) return;
+  
+  const levelEl = document.querySelector('[data-level]');
+  const nameEl = document.querySelector('[data-username]');
+  const xpEl = document.querySelector('[data-xp]');
+  const xpBarEl = document.querySelector('[data-xp-bar]');
+  
+  if (levelEl) levelEl.textContent = `Nível ${userData.level || 10}`;
+  if (nameEl) nameEl.textContent = userData.username || 'Guerreiro';
+  if (xpEl) {
+    const currentXP = userData.current_xp || 1415;
+    const nextLevelXP = userData.next_level_xp || 2700;
+    xpEl.textContent = `${currentXP} / ${nextLevelXP}`;
+  }
+  if (xpBarEl) {
+    const percent = userData.current_xp / userData.next_level_xp * 100;
+    xpBarEl.style.width = percent + '%';
+  }
+}
+
+// ====== CARREGAR TAREFAS DO LOCALSTORAGE ======
+function loadLocalTasks() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    console.log('[DEBUG] localStorage.getItem result:', stored);
+    const result = stored ? JSON.parse(stored) : [];
+    console.log('[DEBUG] Tarefas parseadas:', result);
+    return result;
+  } catch (e) {
+    console.error('Erro ao carregar tarefas do localStorage:', e);
+    return [];
+  }
+}
+
+// ====== RENDERIZAR TAREFAS ======
+function renderMissions() {
+  // Carregar tarefas do localStorage (criadas na página de tarefas)
+  const localTasks = loadLocalTasks();
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const tasksToday = localTasks.filter(t => t.date === today);
+  
+  console.log('🔍 Debug renderMissions:', { 
+    storageKey: STORAGE_KEY,
+    totalLocal: localTasks.length, 
+    today, 
+    tasksToday: tasksToday.length,
+    rawLocalTasks: localTasks,
+    tasks: tasksToday
+  });
+  
+  // Se não houver tarefas locais, usar API
+  const tasksToRender = tasksToday.length > 0 ? tasksToday : missionsData;
+  
+  console.log('📋 Renderizando', tasksToRender.length, 'tarefas');
+  
+  if (!tasksToRender || tasksToRender.length === 0) {
+    console.warn('⚠️ Nenhuma tarefa para renderizar');
+    return;
+  }
+  
+  const tasksContainer = document.querySelector('[data-tasks-container]');
+  if (!tasksContainer) {
+    console.error('❌ Elemento [data-tasks-container] não encontrado no DOM');
+    return;
+  }
+  
+  tasksContainer.innerHTML = '';
+  
+  let completed = 0;
+  tasksToRender.forEach((task, index) => {
+    const isCompleted = task.completed || false;
+    if (isCompleted) completed++;
+    
+    // Mapeamento de prioridade para emoji
+    let emoji = '📝';
+    if (task.priority === 'alta') emoji = '🔴';
+    else if (task.priority === 'media') emoji = '🟡';
+    else if (task.priority === 'baixa') emoji = '🟢';
+    else if (task.emoji) emoji = task.emoji;
+    
+    const taskEl = document.createElement('div');
+    taskEl.className = `task-item ${isCompleted ? 'done' : 'pending'}`;
+    taskEl.innerHTML = `
+      <div class="task-check">${isCompleted ? '✓' : emoji}</div>
+      <div style="flex: 1;">
+        <div style="font-size: 13px; font-weight: 600; color: ${isCompleted ? 'var(--green)' : 'var(--text-soft)'};">${task.title}</div>
+        <div style="font-size: 11px; color: var(--text-soft);">${isCompleted ? '✓ Concluído' : '●'}</div>
+      </div>
+      <div>${isCompleted ? '✅' : ''}</div>
+    `;
+    taskEl.onclick = () => toggleLocalTask(task.id);
+    taskEl.style.cursor = 'pointer';
+    tasksContainer.appendChild(taskEl);
+  });
+  
+  // Atualizar contador
+  const counterEl = document.querySelector('[data-tasks-count]');
+  if (counterEl) counterEl.textContent = `${completed}/${tasksToRender.length}`;
+}
+
+// ====== ALTERNAR TAREFA LOCAL ======
+function toggleLocalTask(taskId) {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return;
+  
+  const tasks = JSON.parse(stored);
+  const task = tasks.find(t => t.id === taskId);
+  
+  if (task) {
+    task.completed = !task.completed;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    renderMissions(); // Atualizar renderização
+  }
+}
+
+// ====== COMPLETAR MISSÃO ======
+async function completeMission(missionId, index) {
+  try {
+    const response = await fetch(`${API_BASE}/missions/${missionId}/complete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      console.log('✅ Missão completa!', result);
+      
+      // Atualizar estado local
+      missionsData[index].completed = !missionsData[index].completed;
+      renderMissions();
+      renderUserData(); // Atualizar XP
+    }
+  } catch (error) {
+    console.error('❌ Erro ao completar missão:', error);
+  }
+}
+
+// ====== RENDERIZAR STREAK ======
+function renderStreak() {
+  if (!streakData) return;
+  
+  const streakEl = document.querySelector('[data-streak]');
+  if (streakEl) {
+    streakEl.textContent = streakData.current_streak || 15;
+  }
+  
+  const multiplierEl = document.querySelector('[data-multiplier]');
+  if (multiplierEl) {
+    const multiplier = streakData.multiplier || 1.0;
+    multiplierEl.textContent = `${(multiplier * 100).toFixed(0)}%`;
+  }
+}
+
+// ====== RENDERIZAR SCORING (PENTÁGONO) ======
+function renderScoring() {
+  if (!scoringData || !scoringData.area_scores) return;
+  
+  // Converter dados para formato do chart
+  const labels = Object.keys(scoringData.area_scores);
+  const data = Object.values(scoringData.area_scores);
+  
+  const radarCtx = document.getElementById('radarChart');
+  if (radarCtx && window.radarChartInstance) {
+    window.radarChartInstance.destroy();
+  }
+  
+  if (radarCtx) {
+    window.radarChartInstance = new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Sua Evolução',
+          data: data,
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.2)',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: '#22ff88'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 100,
+            grid: { color: 'rgba(255,255,255,0.1)' },
+            ticks: { color: '#a1a5b0', backdropColor: 'transparent' }
+          }
+        }
+      }
+    });
+  }
+}
+
+// ====== TOGGLE TAREFA (fallback) ======
+function toggleTask(element) {
+  element.classList.toggle('done');
+  element.classList.toggle('pending');
+}
+
+// ====== INICIAR QUANDO DOM CARREGAR ======
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('[INIT] Dashboard carregando...');
+  console.log('[INIT] STORAGE_KEY:', STORAGE_KEY);
+  
+  initDashboard();
+  
+  // Atualizar a cada 30 segundos
+  setInterval(initDashboard, 30000);
+  
+  // Ouvir mudanças no localStorage (quando voltar da página de tarefas)
+  window.addEventListener('storage', () => {
+    console.log('📝 Tarefas atualizadas, recarregando dashboard...');
+    renderMissions();
+  });
+});
+
+// ====== FUNCAO DE DEBUG ======
+window.testLocalStorage = function() {
+  console.log('\n========== LOCAL STORAGE TEST ==========');
+  console.log('Storage Key:', STORAGE_KEY);
+  console.log('Raw value:', localStorage.getItem(STORAGE_KEY));
+  console.log('Parsed value:', loadLocalTasks());
+  console.log('Today:', new Date().toISOString().split('T')[0]);
+  console.log('=====================================\n');
+}
+</script>
+
+</body>
+</html>

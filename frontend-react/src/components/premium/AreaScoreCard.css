@@ -1,0 +1,35 @@
+.area-score-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.area-score-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 280px;
+}
+
+.area-score-chart .radar-chart-card {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.area-score-chart .radar-chart-card h3 {
+  display: none;
+}
+
+.area-score-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--text-secondary);
+}
+
+.area-score-empty .empty-icon {
+  font-size: 2rem;
+}
+
