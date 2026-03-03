@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hábitos - Solo Leveling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        :root {
+            --bg: #0a0f1b;
+            --card: #0f1623;
+            --green: #22ff88;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --orange: #ff6b35;
+            --text: #e5e7eb;
+            --text-soft: #a1a5b0;
+            --border: #1f2937;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* ====== NAVBAR ====== */
+        .navbar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 70px; 
+            background: linear-gradient(180deg, #0f172a 0%, #0a0f1b 100%); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            padding: 0 40px; 
+            z-index: 1000; 
+            gap: 40px; 
+        }
+        .logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .logo-icon { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-text { font-size: 14px; font-weight: 700; }
+        .logo-sub { font-size: 10px; color: var(--text-soft); }
+        .nav-menu { display: flex; gap: 5px; flex: 1; }
+        .nav-menu a { text-decoration: none; color: var(--text-soft); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .nav-menu a.active { background: var(--blue); color: white; }
+        .nav-menu a:hover { background: rgba(59, 130, 246, 0.3); color: var(--green); }
+        .navbar-right { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+
+        /* ====== MAIN ====== */
+        .container { margin-top: 120px; padding: 30px 40px; }
+        .page-header { margin-bottom: 40px; }
+        .page-title { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+        .page-subtitle { font-size: 12px; color: var(--text-soft); }
+
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 11px; color: var(--text-soft); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+
+        /* ====== GRÁFICO ====== */
+        .chart-container { height: 250px; margin-bottom: 20px; }
+
+        /* ====== TRACKER MENSAL ====== */
+        .month-selector { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .month-selector select {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+        }
+        .month-selector select:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+        .month-selector select option {
+            background: rgba(10, 15, 27, 0.95);
+            color: #e5e7eb;
+        }
+
+        /* ====== TABELA DE HÁBITOS ====== */
+        .habits-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .habits-table thead {
+            background: rgba(255,255,255,0.02);
+            border-bottom: 2px solid var(--border);
+        }
+        .habits-table th {
+            padding: 12px 8px;
+            text-align: center;
+            color: var(--text-soft);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .habits-table th:first-child {
+            text-align: left;
+        }
+        .habits-table tbody tr {
+            border-bottom: 1px solid var(--border);
+        }
+        .habits-table tbody tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        .habits-table td {
+            padding: 12px 8px;
+            text-align: center;
+        }
+        .habits-table td:first-child {
+            text-align: left;
+            padding-left: 12px;
+        }
+        .habit-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+            font-weight: 500;
+        }
+        .habit-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+        }
+        .habit-checkbox:hover {
+            background: rgba(34, 255, 136, 0.1);
+            border-color: var(--green);
+        }
+        .habit-checkbox.completed {
+            background: var(--green);
+            border-color: var(--green);
+            color: var(--bg);
+            font-weight: 700;
+        }
+        .habit-checkbox.future {
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+
+        /* ====== AÇÕES ====== */
+        .habit-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-soft);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .action-btn:hover {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        /* ====== ADICIONAR HÁBITO ====== */
+        .add-habit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: rgba(34, 255, 136, 0.1);
+            border: 1px dashed var(--green);
+            border-radius: 8px;
+            color: var(--green);
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .add-habit-btn:hover {
+            background: rgba(34, 255, 136, 0.2);
+        }
+
+        /* ====== WEEK LABELS ====== */
+        .week-label {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            font-size: 10px;
+            color: var(--text-soft);
+            font-weight: 600;
+            text-transform: uppercase;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        /* ====== MODAL ====== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+        .modal-input:focus { outline: none; border-color: var(--green); }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .modal-btn-confirm { background: var(--green); color: var(--bg); }
+        .modal-btn-cancel { background: rgba(255,255,255,0.1); color: var(--text); }
+
+        @media (max-width: 1200px) {
+            .container { padding: 20px; }
+            .navbar { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <div class="logo-icon">P</div>
+        <div>
+            <div class="logo-text">Solo Leveling</div>
+            <div class="logo-sub">transforme sua vida em um jogo</div>
+        </div>
+    </div>
+    <div class="nav-menu">
+        <a onclick="navigateTo('home')">🏠 Home</a>
+        <a onclick="navigateTo('tasks')">📋 Tarefas</a>
+        <a onclick="navigateTo('goals')">🎯 Metas</a>
+        <a class="active" onclick="navigateTo('habits')">🔄 Hábitos</a>
+        <a onclick="navigateTo('ranking')">🏆 Ranking</a>
+    </div>
+    <div class="navbar-right">
+        <div class="avatar" style="cursor: pointer;" onclick="navigateTo('profile')">G</div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div class="page-title">Hábitos</div>
+        <div class="page-subtitle" data-month-display>fevereiro 2026</div>
+    </div>
+
+    <!-- GRÁFICO DE EVOLUÇÃO -->
+    <div class="card">
+        <div class="card-title">📈 Evolução do Mês</div>
+        <div class="chart-container">
+            <canvas id="habitChart"></canvas>
+        </div>
+    </div>
+
+    <!-- TRACKER MENSAL -->
+    <div class="card">
+        <div class="month-selector">
+            <span style="font-weight: 600;">Tracker Mensal</span>
+            <select id="monthSelect" onchange="changeMonth()">
+                <!-- Preenchido via JavaScript -->
+            </select>
+        </div>
+
+        <table class="habits-table">
+            <thead>
+                <tr>
+                    <th>Hábito</th>
+                    <th colspan="7" class="week-label">SEMANA 1</th>
+                    <th colspan="7" class="week-label">SEMANA 2</th>
+                    <th colspan="7" class="week-label">SEMANA 3</th>
+                    <th colspan="7" class="week-label">SEMANA 4</th>
+                    <th colspan="2" class="week-label">SEMANA 5</th>
+                </tr>
+                <tr id="daysHeaderRow">
+                    <th></th>
+                    <!-- Preenchido via JavaScript -->
+                </tr>
+            </thead>
+            <tbody id="habitsBody">
+                <!-- Preenchido via JavaScript -->
+            </tbody>
+        </table>
+
+        <button class="add-habit-btn" onclick="openAddHabitModal()">+ Adicionar novo hábito</button>
+    </div>
+</div>
+
+<!-- MODAL ADICIONAR HÁBITO -->
+<div class="modal" id="habitModal">
+    <div class="modal-content">
+        <div class="modal-title">Novo Hábito</div>
+        <input type="text" class="modal-input" id="habitNameInput" placeholder="Nome do hábito (ex: Meditação)">
+        <select class="modal-input" id="habitColorInput">
+            <option value="🟢">🟢 Verde</option>
+            <option value="🔵">🔵 Azul</option>
+            <option value="🟡">🟡 Amarelo</option>
+            <option value="🔴">🔴 Vermelho</option>
+            <option value="🟣">🟣 Roxo</option>
+        </select>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-confirm" onclick="confirmAddHabit()">Adicionar</button>
+            <button class="modal-btn modal-btn-cancel" onclick="closeAddHabitModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_HABITS_KEY = 'sololeveling_habits';
+    const STORAGE_HABIT_DATA_KEY = 'sololeveling_habit_data';
+    const MONTHS = [
+        'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+        'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+    ];
+
+    let habits = [];
+    let habitData = {}; // { 'habitId-YYYY-MM-DD': true/false }
+    let currentMonth = ''; // Será definido na inicialização
+
+    // ====== FUSO HORÁRIO E DATA ======
+    function getCurrentDateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+    }
+
+    // ====== NAVEGAÇÃO ======
+    function navigateTo(page) {
+        if (page === 'home') {
+            window.location.href = 'dashboard.html';
+        } else if (page === 'tasks') {
+            window.location.href = 'tasks.html';
+        } else if (page === 'profile') {
+            alert('Perfil do usuário');
+        } else if (page === 'habits') {
+            // Já estamos aqui
+        } else {
+            alert(`Abrindo ${page}...`);
+        }
+    }
+
+    // ====== CARREGAR DADOS ======
+    function loadHabits() {
+        const stored = localStorage.getItem(STORAGE_HABITS_KEY);
+        if (stored) {
+            habits = JSON.parse(stored);
+        } else {
+            habits = [
+                { id: 1, name: 'Beber água', emoji: '💧' },
+                { id: 2, name: 'Exercício físico', emoji: '🏋️' },
+                { id: 3, name: 'Meditação', emoji: '🧘' },
+                { id: 4, name: 'Leitura', emoji: '📚' },
+                { id: 5, name: 'Dormir bem', emoji: '😴' }
+            ];
+            saveHabits();
+        }
+
+        const storedData = localStorage.getItem(STORAGE_HABIT_DATA_KEY);
+        if (storedData) {
+            habitData = JSON.parse(storedData);
+        }
+    }
+
+    function saveHabits() {
+        localStorage.setItem(STORAGE_HABITS_KEY, JSON.stringify(habits));
+    }
+
+    function saveHabitData() {
+        localStorage.setItem(STORAGE_HABIT_DATA_KEY, JSON.stringify(habitData));
+    }
+
+    // ====== RENDERIZAR HEADER COM DIAS ======
+    function renderDaysHeader() {
+        const [year, month] = currentMonth.split('-');
+        const daysInMonth = new Date(year, month, 0).getDate();
+        let headerHtml = '<th></th>';
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            headerHtml += `<th>${day}</th>`;
+        }
+        
+        document.getElementById('daysHeaderRow').innerHTML = headerHtml;
+    }
+
+    // ====== RENDERIZAR TABELA ======
+    function renderHabitsTable() {
+        const [year, month] = currentMonth.split('-');
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const tbody = document.getElementById('habitsBody');
+
+        tbody.innerHTML = habits.map(habit => {
+            let row = `<tr><td><div class="habit-name">${habit.emoji} ${habit.name}<button class="action-btn" onclick="deleteHabit(${habit.id})" title="Deletar hábito" style="margin-left: 8px;">🗑️</button></div></td>`;
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${month}-${String(day).padStart(2, '0')}`;
+                const key = `${habit.id}-${dateStr}`;
+                const isCompleted = habitData[key] || false;
+                
+                row += `
+                    <td>
+                        <div class="habit-checkbox ${isCompleted ? 'completed' : ''}" 
+                             onclick="toggleHabit('${habit.id}', '${dateStr}')">
+                            ${isCompleted ? '✓' : ''}
+                        </div>
+                    </td>
+                `;
+            }
+            
+            row += '</tr>';
+            return row;
+        }).join('');
+    }
+
+    // ====== ALTERNAR DIA DO HÁBITO ======
+    function toggleHabit(habitId, dateStr) {
+        const key = `${habitId}-${dateStr}`;
+        habitData[key] = !habitData[key];
+        saveHabitData();
+        renderHabitsTable();
+        renderChart();
+    }
+
+    // ====== GRÁFICO DE EVOLUÇÃO ======
+    function renderChart() {
+        const [year, month] = currentMonth.split('-');
+        const daysInMonth = new Date(year, month, 0).getDate();
+        
+        const completionByDay = [];
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${year}-${month}-${String(day).padStart(2, '0')}`;
+            const count = habits.filter(h => habitData[`${h.id}-${dateStr}`]).length;
+            completionByDay.push((count / habits.length) * 100);
+        }
+
+        const ctx = document.getElementById('habitChart');
+        if (window.habitChartInstance) {
+            window.habitChartInstance.destroy();
+        }
+
+        window.habitChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: daysInMonth }, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Conclusão (%)',
+                    data: completionByDay,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        max: 100,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#a1a5b0' }
+                    },
+                    x: { 
+                        grid: { display: false }, 
+                        ticks: { color: '#a1a5b0' }
+                    }
+                }
+            }
+        });
+    }
+
+    // ====== GERAR OPÇÕES DE MÊS DINAMICAMENTE ======
+    function populateMonthOptions() {
+        const select = document.getElementById('monthSelect');
+        select.innerHTML = '';
+        
+        const now = new Date();
+        
+        // Gerar próximos 24 meses
+        for (let i = 0; i < 24; i++) {
+            const date = new Date(now.getFullYear(), now.getMonth() + i, 1);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const monthValue = `${year}-${month}`;
+            const monthName = MONTHS[date.getMonth()];
+            
+            // Marcar mês atual como selecionado
+            const isCurrentMonth = monthValue === currentMonth;
+            const option = document.createElement('option');
+            option.value = monthValue;
+            option.textContent = `${monthName} de ${year}`;
+            if (isCurrentMonth) option.selected = true;
+            select.appendChild(option);
+        }
+    }
+
+    // ====== MUDAR MÊS ======
+    function changeMonth() {
+        currentMonth = document.getElementById('monthSelect').value;
+        const [year, month] = currentMonth.split('-');
+        const monthName = MONTHS[parseInt(month) - 1];
+        document.querySelector('[data-month-display]').textContent = `${monthName} de ${year}`;
+        renderDaysHeader();
+        renderHabitsTable();
+        renderChart();
+    }
+
+    // ====== DELETAR HÁBITO ======
+    function deleteHabit(habitId) {
+        if (confirm('Tem certeza que deseja deletar este hábito?')) {
+            habits = habits.filter(h => h.id !== habitId);
+            // Limpar dados deste hábito
+            Object.keys(habitData).forEach(key => {
+                if (key.startsWith(`${habitId}-`)) {
+                    delete habitData[key];
+                }
+            });
+            saveHabits();
+            saveHabitData();
+            renderHabitsTable();
+            renderChart();
+        }
+    }
+
+    // ====== MODAL ADICIONAR HÁBITO ======
+    function openAddHabitModal() {
+        document.getElementById('habitModal').classList.add('active');
+    }
+
+    function closeAddHabitModal() {
+        document.getElementById('habitModal').classList.remove('active');
+    }
+
+    function confirmAddHabit() {
+        const name = document.getElementById('habitNameInput').value.trim();
+        const emoji = document.getElementById('habitColorInput').value;
+        
+        if (!name) {
+            alert('Digite o nome do hábito');
+            return;
+        }
+
+        const newHabit = {
+            id: Date.now(),
+            name: name,
+            emoji: emoji
+        };
+
+        habits.push(newHabit);
+        saveHabits();
+        renderHabitsTable();
+        renderChart();
+        closeAddHabitModal();
+
+        document.getElementById('habitNameInput').value = '';
+    }
+
+    // ====== INICIALIZAR ======
+    document.addEventListener('DOMContentLoaded', () => {
+        // Definir mês atual respeitando fuso horário
+        currentMonth = getCurrentDateString();
+        
+        // Carregar dados
+        loadHabits();
+        
+        // Gerar opções de mês
+        populateMonthOptions();
+        
+        // Atualizar display
+        const [year, month] = currentMonth.split('-');
+        const monthName = MONTHS[parseInt(month) - 1];
+        document.querySelector('[data-month-display]').textContent = `${monthName} de ${year}`;
+        
+        // Renderizar
+        renderDaysHeader();
+        renderHabitsTable();
+        renderChart();
+    });
+</script>
+
+</body>
+</html>
