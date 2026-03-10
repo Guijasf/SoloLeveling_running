@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from app.models.user_progress import UserProgress
 from app.models.metric_log import MetricLog
 from app.models.daily_mission import DailyMission
-from app.models.goal import Goal
+# from app.models.goal import Goal  # Removido - usar AdaptiveGoal no futuro
 from app.models.achievement import Achievement
 from app.services.scoring_service import calculate_area_scores, find_weakest_area
 
@@ -33,11 +33,8 @@ def calculate_user_stats(db: Session, user_id: int) -> dict:
         DailyMission.completed == True
     ).count()
 
-    # 3. Total de goals completadas
-    total_goals = db.query(Goal).filter(
-        Goal.user_id == user_id,
-        Goal.completed == True
-    ).count()
+    # 3. Total de goals completadas (TODO: usar AdaptiveGoal no futuro)
+    total_goals = 0  # db.query(Goal).filter(...).count()  # Removido - usar AdaptiveGoal
 
     # 4. Total de achievements
     total_achievements = db.query(Achievement).filter(

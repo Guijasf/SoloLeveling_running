@@ -4,7 +4,6 @@ from app.models.user_progress import UserProgress
 from app.models.user_settings import UserSettings
 from app.models.user_focus import UserFocus
 from app.models.daily_mission import DailyMission
-from app.models.goal import Goal
 from app.models.life_area import LifeArea
 from app.models.achievement import Achievement
 from app.models.metric_type import MetricType
@@ -16,7 +15,6 @@ __all__ = [
     "UserSettings", 
     "UserFocus",
     "DailyMission",
-    "Goal",
     "LifeArea",
     "Achievement",
     "MetricType",

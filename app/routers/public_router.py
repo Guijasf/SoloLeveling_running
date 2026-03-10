@@ -112,7 +112,7 @@ async def get_scoring_public(user_id: int, db: Session = Depends(get_db)):
     Para renderizar o gráfico de pentágono
     """
     from app.models.life_area import LifeArea
-    from app.models.goal import Goal
+    # from app.models.goal import Goal  # Removido - usar AdaptiveGoal no futuro
     
     # Default areas if none exist
     default_areas = {

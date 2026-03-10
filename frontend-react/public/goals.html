@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metas - Solo Leveling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #0a0f1b;
+            --card: #0f1623;
+            --green: #22ff88;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --orange: #ff6b35;
+            --text: #e5e7eb;
+            --text-soft: #a1a5b0;
+            --border: #1f2937;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* ====== NAVBAR ====== */
+        .navbar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 70px; 
+            background: linear-gradient(180deg, #0f172a 0%, #0a0f1b 100%); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            padding: 0 40px; 
+            z-index: 1000; 
+            gap: 40px; 
+        }
+        .logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .logo-icon { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-text { font-size: 14px; font-weight: 700; }
+        .logo-sub { font-size: 10px; color: var(--text-soft); }
+        .nav-menu { display: flex; gap: 5px; flex: 1; }
+        .nav-menu a { text-decoration: none; color: var(--text-soft); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .nav-menu a.active { background: var(--blue); color: white; }
+        .nav-menu a:hover { background: rgba(59, 130, 246, 0.3); color: var(--green); }
+        .navbar-right { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+
+        /* ====== MAIN ====== */
+        .container { margin-top: 120px; padding: 30px 40px; max-width: 1400px; margin-left: auto; margin-right: auto; }
+        .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .header-left h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+        .header-left p { font-size: 14px; color: var(--text-soft); }
+        .btn-new { padding: 10px 20px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-new:hover { background: rgba(59, 130, 246, 0.8); }
+
+        /* ====== CARD ====== */
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: var(--text); }
+
+        /* ====== GOAL CARD ====== */
+        .goals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .goal-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
+        .goal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+        }
+        
+        .goal-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; }
+        .goal-title { font-size: 16px; font-weight: 700; }
+        .goal-desc { font-size: 12px; color: var(--text-soft); margin-bottom: 12px; }
+        
+        .goal-meta { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
+        .goal-days { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 700; color: var(--orange); }
+        
+        .progress-container { margin-bottom: 15px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-soft); margin-bottom: 8px; }
+        .progress-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #0ea5e9); border-radius: 10px; transition: width 0.3s; }
+        
+        .goal-action { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 12px; color: var(--text-soft); display: flex; align-items: center; gap: 8px; }
+        .goal-action input { flex: 1; background: transparent; border: none; color: var(--text); outline: none; }
+        .goal-action button { background: transparent; border: none; color: var(--green); cursor: pointer; font-weight: 600; }
+
+        .goal-status { padding: 12px; border-radius: 8px; text-align: center; font-weight: 600; margin-bottom: 12px; }
+        .goal-status.completed { background: rgba(34, 255, 136, 0.15); color: var(--green); }
+        .goal-status.active { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+
+        /* ====== TIPOS DE METAS ====== */
+        .goal-type-daily, .goal-type-frequency, .goal-type-cumulative, .goal-type-milestone {
+            padding: 15px; 
+            background: rgba(255,255,255,0.02); 
+            border-radius: 8px; 
+            margin-bottom: 12px;
+        }
+
+        .streak-badge {
+            display: inline-block;
+            padding: 8px 12px;
+            background: rgba(255, 107, 53, 0.2);
+            border: 1px solid var(--orange);
+            border-radius: 6px;
+            color: var(--orange);
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-soft);
+        }
+
+        .progress-stats div {
+            padding: 8px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+        }
+
+        .frequency-badge {
+            display: inline-block;
+            padding: 10px 15px;
+            background: rgba(34, 255, 136, 0.15);
+            border: 1px solid var(--green);
+            border-radius: 6px;
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .countdown {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-top: 8px;
+        }
+
+        .total-accumulated {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 8px;
+        }
+
+        .pace {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .projection {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+        }
+
+        .milestone-progress {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 8px;
+        }
+
+        .milestone-improvement {
+            font-size: 13px;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .goal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+        .btn-small { padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 6px; color: var(--text-soft); cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .btn-small:hover { background: rgba(255, 68, 68, 0.2); color: #ff4444; border-color: #ff4444; }
+
+        .menu-btn { width: 32px; height: 32px; background: transparent; border: none; color: var(--text-soft); cursor: pointer; font-size: 18px; transition: 0.3s; }
+        .menu-btn:hover { color: var(--text); }
+
+        /* ====== MODAL ====== */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; width: 90%; max-width: 500px; }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .modal-input { width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; color: var(--text); margin-bottom: 15px; }
+        .modal-input:focus { outline: none; border-color: var(--green); }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .modal-btn-confirm { background: var(--green); color: var(--bg); }
+        .modal-btn-cancel { background: rgba(255,255,255,0.1); color: var(--text); }
+
+        /* ====== EMPTY STATE ====== */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-soft); }
+        .empty-state-icon { font-size: 48px; margin-bottom: 15px; }
+
+        @media (max-width: 1200px) {
+            .container { padding: 20px; }
+            .goals-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <div class="logo-icon">P</div>
+        <div>
+            <div class="logo-text">Solo Leveling</div>
+            <div class="logo-sub">transforme sua vida em um jogo</div>
+        </div>
+    </div>
+    <div class="nav-menu">
+        <a onclick="navigateTo('home')">🏠 Home</a>
+        <a onclick="navigateTo('tasks')">📋 Tarefas</a>
+        <a class="active" onclick="navigateTo('goals')">🎯 Metas</a>
+        <a onclick="navigateTo('habits')">🔄 Hábitos</a>
+        <a onclick="navigateTo('ranking')">🏆 Ranking</a>
+    </div>
+    <div class="navbar-right">
+        <div class="avatar" style="cursor: pointer;" onclick="navigateTo('profile')">G</div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+    <div class="page-header">
+        <div class="header-left">
+            <h1>Metas</h1>
+            <p>Desafios com começo, meio e fim</p>
+        </div>
+        <button class="btn-new" onclick="openGoalModal()">+ Nova Meta</button>
+    </div>
+
+    <!-- METAS ATIVAS -->
+    <div class="card">
+        <h2 class="section-title">Metas Ativas (<span id="activeCount">0</span>)</h2>
+        <div id="activeGoalsContainer" class="goals-grid">
+            <!-- Preenchido via JavaScript -->
+        </div>
+        <div id="activeEmpty" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">🎯</div>
+            <p>Nenhuma meta ativa no momento</p>
+        </div>
+    </div>
+
+    <!-- METAS CONCLUÍDAS -->
+    <div class="card">
+        <h2 class="section-title">Metas Concluídas (<span id="completedCount">0</span>)</h2>
+        <div id="completedGoalsContainer" class="goals-grid">
+            <!-- Preenchido via JavaScript -->
+        </div>
+        <div id="completedEmpty" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">📭</div>
+            <p>Nenhuma meta concluída ainda</p>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL NOVA META -->
+<div class="modal" id="goalModal">
+    <div class="modal-content">
+        <div class="modal-title">Nova Meta</div>
+        <input type="text" class="modal-input" id="goalNameInput" placeholder="Nome da meta (ex: Perder 10kg)">
+        <input type="text" class="modal-input" id="goalDescInput" placeholder="Descrição detalhada">
+        <input type="number" class="modal-input" id="goalDaysInput" placeholder="Dias para conclusão" min="1">
+        <input type="text" class="modal-input" id="goalEmojiInput" placeholder="Emoji (ex: 🔥)">
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-confirm" onclick="confirmAddGoal()">Criar Meta</button>
+            <button class="modal-btn modal-btn-cancel" onclick="closeGoalModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ====== CONFIG ======
+    const API_BASE_URL = 'http://localhost:8000/api';
+    const USER_ID = 1; // TODO: Pegar do token JWT
+    const USE_API = true; // Togglear para testar
+    
+    const STORAGE_GOALS_KEY = 'sololeveling_goals';
+    const STORAGE_REGISTRIES_KEY = 'sololeveling_goal_registries';
+    const STORAGE_ACHIEVEMENTS_KEY = 'sololeveling_achievements';
+
+    let goals = [];
+    let registries = {}; // { goalId: [{ date, value, note }] }
+    let achievements = [];
+    let isOnline = navigator.onLine;
+
+    // ====== CALCULADORES POR TIPO ======
+    class DailyCalculator {
+        calculate(goal, goalRegistries) {
+            const targetDays = this.getTargetDays(goal) || 1;
+            const completedDays = goalRegistries.filter(r => r.value >= (goal.targetValue || 1)).length;
+            const progress = targetDays > 0 ? Math.min((completedDays / targetDays) * 100, 100) : 0;
+            
+            return {
+                progress: progress,
+                completedDays,
+                totalDays: targetDays,
+                currentStreak: this.getCurrentStreak(goalRegistries, goal.targetValue),
+                longestStreak: this.getLongestStreak(goalRegistries, goal.targetValue),
+                totalValue: goalRegistries.reduce((sum, r) => sum + r.value, 0),
+                avgDaily: goalRegistries.length > 0 ? 
+                    goalRegistries.reduce((sum, r) => sum + r.value, 0) / goalRegistries.length : 0,
+                consistency: goalRegistries.length > 0 ?
+                    (completedDays / goalRegistries.length) * 100 : 0
+            };
+        }
+        
+        getTargetDays(goal) {
+            const start = new Date(goal.startDate);
+            const end = new Date(goal.endDate);
+            return Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+        }
+        
+        getCurrentStreak(registries, targetValue) {
+            let streak = 0;
+            const today = new Date();
+            
+            for (let i = 0; i < 365; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(checkDate.getDate() - i);
+                const dateStr = checkDate.toISOString().split('T')[0];
+                
+                const dayRegistry = registries.find(r => r.date === dateStr);
+                if (dayRegistry && dayRegistry.value >= targetValue) {
+                    streak++;
+                } else if (i === 0) {
+                    return 0;
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+        
+        getLongestStreak(registries, targetValue) {
+            let maxStreak = 0;
+            let currentStreak = 0;
+            
+            registries.forEach(record => {
+                if (record.value >= targetValue) {
+                    currentStreak++;
+                    maxStreak = Math.max(maxStreak, currentStreak);
+                } else {
+                    currentStreak = 0;
+                }
+            });
+            
+            return maxStreak;
+        }
+    }
+
+    class FrequencyCalculator {
+        calculate(goal, goalRegistries) {
+            const period = goal.period;
+            const currentPeriodStart = this.getPeriodStart(period);
+            const thisPeriodsCount = goalRegistries.filter(r => new Date(r.date) >= currentPeriodStart).length;
+            const totalPeriodsInGoal = this.countPeriods(goal);
+            const targetValue = goal.targetValue || 1;
+            
+            return {
+                progress: Math.min((thisPeriodsCount / targetValue) * 100, 100),
+                thisPeriodsCount,
+                targetPerPeriod: targetValue,
+                totalRegistries: goalRegistries.length,
+                nextTarget: Math.max(0, targetValue - thisPeriodsCount),
+                daysUntilReset: this.daysUntilPeriodReset(period),
+                onTrack: thisPeriodsCount >= targetValue
+            };
+        }
+        
+        getPeriodStart(period) {
+            const today = new Date();
+            if (period === 'week') {
+                const day = today.getDay();
+                const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+                return new Date(today.setDate(diff));
+            } else if (period === 'month') {
+                return new Date(today.getFullYear(), today.getMonth(), 1);
+            }
+            return today;
+        }
+        
+        daysUntilPeriodReset(period) {
+            const today = new Date();
+            if (period === 'week') {
+                return 7 - today.getDay();
+            } else if (period === 'month') {
+                const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+                return Math.ceil((nextMonth - today) / (1000 * 60 * 60 * 24));
+            }
+            return 0;
+        }
+        
+        countPeriods(goal) {
+            const start = new Date(goal.startDate);
+            const end = new Date(goal.endDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            
+            if (goal.period === 'week') return Math.ceil(days / 7);
+            if (goal.period === 'month') return Math.ceil(days / 30);
+            return 1;
+        }
+    }
+
+    class CumulativeCalculator {
+        calculate(goal, goalRegistries) {
+            const totalAccumulated = goalRegistries.reduce((sum, r) => sum + r.value, 0);
+            const daysElapsed = this.daysElapsed(goal);
+            const totalDays = this.getTotalDays(goal) || 1;
+            const targetValue = goal.targetValue || 100;
+            const expectedAtThisPoint = (targetValue / totalDays) * daysElapsed;
+            
+            return {
+                progress: Math.min((totalAccumulated / targetValue) * 100, 100),
+                totalAccumulated,
+                targetValue: targetValue,
+                remaining: Math.max(0, targetValue - totalAccumulated),
+                avgDaily: goalRegistries.length > 0 ? totalAccumulated / goalRegistries.length : 0,
+                onTrack: totalAccumulated >= expectedAtThisPoint,
+                projectedEnd: this.projectCompletion(goal, goalRegistries),
+                daysRemaining: totalDays - daysElapsed
+            };
+        }
+        
+        daysElapsed(goal) {
+            const start = new Date(goal.startDate);
+            const today = new Date();
+            return Math.ceil((today - start) / (1000 * 60 * 60 * 24));
+        }
+        
+        getTotalDays(goal) {
+            const start = new Date(goal.startDate);
+            const end = new Date(goal.endDate);
+            return Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+        }
+        
+        projectCompletion(goal, goalRegistries) {
+            if (goalRegistries.length < 2) return null;
+            
+            const avgDaily = goalRegistries.reduce((sum, r) => sum + r.value, 0) / goalRegistries.length;
+            const remaining = goal.targetValue - goalRegistries.reduce((sum, r) => sum + r.value, 0);
+            const daysNeeded = Math.ceil(remaining / avgDaily);
+            
+            const projectionDate = new Date();
+            projectionDate.setDate(projectionDate.getDate() + daysNeeded);
+            
+            return {
+                date: projectionDate.toLocaleDateString('pt-BR'),
+                daysNeeded,
+                onTime: projectionDate <= new Date(goal.endDate)
+            };
+        }
+    }
+
+    class MilestoneCalculator {
+        calculate(goal, goalRegistries) {
+            const currentValue = goalRegistries.length > 0 ? 
+                Math.max(...goalRegistries.map(r => r.value)) : 0;
+            const previousBest = goalRegistries.length > 1 ? 
+                goalRegistries.slice(0, -1).reduce((max, r) => Math.max(max, r.value), 0) : 0;
+            const targetValue = goal.targetValue || 100;
+            
+            return {
+                progress: Math.min((currentValue / targetValue) * 100, 100),
+                currentValue,
+                targetValue: targetValue,
+                remaining: Math.max(0, targetValue - currentValue),
+                improved: currentValue > previousBest,
+                improvement: currentValue - previousBest,
+                lastRecord: goalRegistries.length > 0 ? goalRegistries[goalRegistries.length - 1] : null,
+                bestRecord: goalRegistries.length > 0 ? Math.max(...goalRegistries.map(r => r.value)) : 0
+            };
+        }
+    }
+
+    // ====== FACTORY DE CALCULADORES ======
+    class CalculatorFactory {
+        static calculators = {
+            'daily': new DailyCalculator(),
+            'frequency': new FrequencyCalculator(),
+            'cumulative': new CumulativeCalculator(),
+            'milestone': new MilestoneCalculator()
+        };
+        
+        static getCalculator(goalType) {
+            return CalculatorFactory.calculators[goalType] || CalculatorFactory.calculators['daily'];
+        }
+    }
+
+    // ====== GAMIFICAÇÃO ======
+    class GamificationSystem {
+        static calculateXP(goal, registry, progress) {
+            let xp = 10;
+            
+            const typeBonus = {
+                'daily': 15,
+                'frequency': 20,
+                'cumulative': 25,
+                'milestone': 30
+            };
+            xp += typeBonus[goal.type] || 15;
+            
+            // Bônus por exceder meta
+            if (registry.value > goal.targetValue) {
+                const excess = registry.value - goal.targetValue;
+                xp += Math.ceil(excess / goal.targetValue * 10);
+            }
+            
+            // Bônus por streak
+            if (progress.currentStreak > 7) xp += 10;
+            if (progress.currentStreak > 30) xp += 25;
+            if (progress.currentStreak > 100) xp += 50;
+            
+            return xp;
+        }
+        
+        static getAchievements(goal, progress) {
+            const achievements = [];
+            
+            if (progress.currentStreak >= 7) {
+                achievements.push({
+                    id: 'week_streak_' + goal.id,
+                    name: '🔥 Uma Semana!',
+                    description: '7 dias consecutivos'
+                });
+            }
+            
+            if (progress.currentStreak >= 30) {
+                achievements.push({
+                    id: 'month_streak_' + goal.id,
+                    name: '🌝 Um Mês!',
+                    description: '30 dias consecutivos'
+                });
+            }
+            
+            if (progress.progress >= 100) {
+                achievements.push({
+                    id: 'goal_completed_' + goal.id,
+                    name: '🏆 Meta Atingida!',
+                    description: `${goal.title} completada`
+                });
+            }
+            
+            if (progress.consistency >= 95) {
+                achievements.push({
+                    id: 'iron_discipline_' + goal.id,
+                    name: '⚡ Disciplina de Ferro',
+                    description: '95% de consistência'
+                });
+            }
+            
+            return achievements;
+        }
+    }
+
+    // ====== NAVEGAÇÃO ======
+    function navigateTo(page) {
+        if (page === 'home') {
+            window.location.href = 'dashboard.html';
+        } else if (page === 'tasks') {
+            window.location.href = 'tasks.html';
+        } else if (page === 'goals') {
+            window.location.href = 'goals.html';
+        } else if (page === 'habits') {
+            window.location.href = 'habits.html';
+        } else if (page === 'profile') {
+            alert('Perfil do usuário');
+        } else if (page === 'ranking') {
+            alert('Ranking do sistema');
+        }
+    }
+
+    // ====== API CALLS ======
+    async function apiCall(method, endpoint, data = null) {
+        const url = `${API_BASE_URL}${endpoint}`;
+        const options = {
+            method,
+            headers: { 'Content-Type': 'application/json' }
+        };
+        
+        if (data) options.body = JSON.stringify(data);
+        
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error('❌ API Error:', error);
+            return null;
+        }
+    }
+
+    async function syncGoalsFromAPI() {
+        if (!USE_API || !isOnline) return false;
+        
+        console.log('🔄 Sincronizando metas do backend...');
+        const response = await apiCall('GET', '/goals/');
+        
+        if (!response) return false;
+        
+        // response é array de { goal, progress, achievements, xp_earned }
+        goals = response.map(item => item.goal);
+        registries = {};
+        
+        response.forEach(item => {
+            if (item.goal.registries) {
+                registries[item.goal.id] = item.goal.registries;
+            }
+        });
+        
+        console.log('✅ Metas sincronizadas:', goals.length);
+        return true;
+    }
+
+    async function createGoalOnAPI(goalData) {
+        if (!USE_API || !isOnline) return null;
+        
+        const response = await apiCall('POST', '/goals/', {
+            ...goalData,
+            user_id: USER_ID
+        });
+        
+        return response?.goal || null;
+    }
+
+    async function registerProgressOnAPI(goalId, date, value, note = '') {
+        if (!USE_API || !isOnline) return false;
+        
+        const response = await apiCall('POST', `/goals/${goalId}/registries`, {
+            date,
+            value,
+            note
+        });
+        
+        return response ? true : false;
+    }
+
+    async function deleteGoalOnAPI(goalId) {
+        if (!USE_API || !isOnline) return false;
+        
+        const response = await apiCall('DELETE', `/goals/${goalId}`);
+        return response ? true : false;
+    }
+
+    async function updateGoalOnAPI(goalId, updates) {
+        if (!USE_API || !isOnline) return false;
+        
+        const response = await apiCall('PATCH', `/goals/${goalId}`, updates);
+        return response ? true : false;
+    }
+
+    // ====== CARREGAR DADOS ======
+    async function loadGoals() {
+        // Tentar carregat do backend primeiro
+        if (USE_API && isOnline) {
+            const success = await syncGoalsFromAPI();
+            if (success) {
+                saveGoals();  // Cache no localStorage
+                return;
+            }
+        }
+        
+        // Fallback: localStorage
+        console.log('📦 Carregando metas do localStorage...');
+        const stored = localStorage.getItem(STORAGE_GOALS_KEY);
+        if (stored) {
+            goals = JSON.parse(stored);
+        } else {
+            goals = [
+                {
+                    id: 1,
+                    title: '150kg no Supino',
+                    description: 'Bater 150kg no supino até o final do trimestre',
+                    emoji: '🏋️',
+                    type: 'milestone',
+                    targetValue: 150,
+                    unit: 'kg',
+                    startDate: '2026-03-10',
+                    endDate: '2026-06-10',
+                    period: 'month',
+                    status: 'active',
+                    priority: 5
+                },
+                {
+                    id: 2,
+                    title: 'Ler 15 páginas por dia',
+                    description: 'Desenvolver hábito de leitura diária',
+                    emoji: '📚',
+                    type: 'daily',
+                    targetValue: 15,
+                    unit: 'páginas',
+                    startDate: '2026-03-10',
+                    endDate: '2026-03-17',
+                    period: 'day',
+                    status: 'active',
+                    priority: 4
+                },
+                {
+                    id: 3,
+                    title: 'Treinar 4 vezes por semana',
+                    description: 'Manter consistência na academia',
+                    emoji: '💪',
+                    type: 'frequency',
+                    targetValue: 4,
+                    unit: 'vezes',
+                    startDate: '2026-03-10',
+                    endDate: '2026-04-10',
+                    period: 'week',
+                    status: 'active',
+                    priority: 5
+                },
+                {
+                    id: 4,
+                    title: 'Correr 50km no mês',
+                    description: 'Meta acumulativa de corrida',
+                    emoji: '🏃',
+                    type: 'cumulative',
+                    targetValue: 50,
+                    unit: 'km',
+                    startDate: '2026-03-01',
+                    endDate: '2026-03-31',
+                    period: 'month',
+                    status: 'active',
+                    priority: 3
+                }
+            ];
+            saveGoals();
+        }
+
+        // Carregar registries
+        const storedRegistries = localStorage.getItem(STORAGE_REGISTRIES_KEY);
+        if (storedRegistries) {
+            registries = JSON.parse(storedRegistries);
+        } else {
+            // Dados padrão para teste
+            registries = {
+                '1': [
+                    { date: '2026-03-08', value: 140, note: '' },
+                    { date: '2026-03-09', value: 145, note: '' },
+                    { date: '2026-03-10', value: 148, note: 'Pessoal!' }
+                ],
+                '2': [
+                    { date: '2026-03-08', value: 18, note: '' },
+                    { date: '2026-03-09', value: 15, note: '' },
+                    { date: '2026-03-10', value: 20, note: '' }
+                ],
+                '3': [
+                    { date: '2026-03-08', value: 1, note: 'Musculação' },
+                    { date: '2026-03-09', value: 1, note: 'Cardio' },
+                    { date: '2026-03-10', value: 1, note: 'Musculação' }
+                ],
+                '4': [
+                    { date: '2026-03-06', value: 10, note: '' },
+                    { date: '2026-03-08', value: 12, note: '' },
+                    { date: '2026-03-10', value: 8, note: '' }
+                ]
+            };
+            saveRegistries();
+        }
+    }
+
+    function saveGoals() {
+        localStorage.setItem(STORAGE_GOALS_KEY, JSON.stringify(goals));
+    }
+
+    function saveRegistries() {
+        localStorage.setItem(STORAGE_REGISTRIES_KEY, JSON.stringify(registries));
+    }
+
+    // ====== REGISTRAR PROGRESSO ======
+    function registerProgress(goalId) {
+        const goal = goals.find(g => g.id === goalId);
+        const input = document.querySelector(`input[data-goal-id="${goalId}"]`);
+        const value = parseFloat(input.value);
+
+        if (!value || value <= 0) {
+            alert('Digite um valor válido');
+            return;
+        }
+
+        if (!registries[goalId]) {
+            registries[goalId] = [];
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Registrar no backend se disponível
+        if (USE_API && isOnline) {
+            registerProgressOnAPI(goalId, today, value).then(success => {
+                if (success) {
+                    console.log('✅ Progresso registrado no backend');
+                    registries[goalId].push({
+                        date: today,
+                        value: value,
+                        note: ''
+                    });
+                } else {
+                    console.log('⚠️ Falha ao registrar no backend, salvando localmente');
+                    registries[goalId].push({
+                        date: today,
+                        value: value,
+                        note: ''
+                    });
+                }
+                saveRegistries();
+                input.value = '';
+                renderGoals();
+            });
+        } else {
+            // Fallback: apenas localStorage
+            registries[goalId].push({
+                date: today,
+                value: value,
+                note: ''
+            });
+            saveRegistries();
+            input.value = '';
+            renderGoals();
+        }
+    }
+
+    // ====== RENDERIZAR METAS ======
+    function renderGoals() {
+        const activeGoals = goals.filter(g => g.status === 'active');
+        const completedGoals = goals.filter(g => g.status === 'completed');
+
+        const activeContainer = document.getElementById('activeGoalsContainer');
+        const activeEmpty = document.getElementById('activeEmpty');
+        document.getElementById('activeCount').textContent = activeGoals.length;
+
+        if (activeGoals.length === 0) {
+            activeContainer.innerHTML = '';
+            activeEmpty.style.display = 'block';
+        } else {
+            activeEmpty.style.display = 'none';
+            activeContainer.innerHTML = activeGoals.map(goal => renderGoalCard(goal)).join('');
+        }
+
+        const completedContainer = document.getElementById('completedGoalsContainer');
+        const completedEmpty = document.getElementById('completedEmpty');
+        document.getElementById('completedCount').textContent = completedGoals.length;
+
+        if (completedGoals.length === 0) {
+            completedContainer.innerHTML = '';
+            completedEmpty.style.display = 'block';
+        } else {
+            completedEmpty.style.display = 'none';
+            completedContainer.innerHTML = completedGoals.map(goal => renderGoalCard(goal)).join('');
+        }
+    }
+
+    function renderGoalCard(goal) {
+        const goalRegistries = registries[goal.id] || [];
+        const calculator = CalculatorFactory.getCalculator(goal.type);
+        const progress = calculator.calculate(goal, goalRegistries);
+
+        let typeSpecificContent = '';
+        
+        if (goal.type === 'daily') {
+            typeSpecificContent = `
+                <div class="goal-type-daily">
+                    <div class="streak-badge">🔥 ${progress.currentStreak} dias</div>
+                    <div class="progress-stats">
+                        <div>Dias: ${progress.completedDays}/${progress.totalDays}</div>
+                        <div>Consistência: ${progress.consistency.toFixed(0)}%</div>
+                    </div>
+                </div>
+            `;
+        } else if (goal.type === 'frequency') {
+            typeSpecificContent = `
+                <div class="goal-type-frequency">
+                    <div class="frequency-badge">${progress.thisPeriodsCount}/${goal.targetValue} esta semana</div>
+                    <div class="countdown">${progress.nextTarget} faltam</div>
+                </div>
+            `;
+        } else if (goal.type === 'cumulative') {
+            typeSpecificContent = `
+                <div class="goal-type-cumulative">
+                    <div class="total-accumulated">${progress.totalAccumulated.toFixed(1)}/${goal.targetValue}${goal.unit}</div>
+                    <div class="pace">${progress.onTrack ? '✅ No ritmo' : '⚠️ Atrasado'}</div>
+                    ${progress.projectedEnd ? `<div class="projection">Conclusão: ${progress.projectedEnd.date}</div>` : ''}
+                </div>
+            `;
+        } else if (goal.type === 'milestone') {
+            typeSpecificContent = `
+                <div class="goal-type-milestone">
+                    <div class="milestone-progress">${progress.currentValue}/${goal.targetValue}${goal.unit}</div>
+                    ${progress.lastRecord ? `<div class="milestone-improvement">Último: ${progress.lastRecord.value}${goal.unit}</div>` : ''}
+                </div>
+            `;
+        }
+
+        return `
+            <div class="goal-card" data-type="${goal.type}">
+                <div class="goal-header">
+                    <div>
+                        <div class="goal-title">${goal.emoji} ${goal.title}</div>
+                        <div class="goal-desc">${goal.description}</div>
+                    </div>
+                    <button class="menu-btn" onclick="deleteGoal(${goal.id})">⋮</button>
+                </div>
+
+                ${typeSpecificContent}
+
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Progresso</span>
+                        <span>${progress.progress.toFixed(0)}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress.progress}%"></div>
+                    </div>
+                </div>
+
+                <div class="goal-action">
+                    <input type="number" placeholder="Registre ${goal.targetValue || 1}${goal.unit || ''}" data-goal-id="${goal.id}">
+                    <button onclick="registerProgress(${goal.id})">✓ Registrar</button>
+                </div>
+
+                <div class="goal-status ${goal.status}">
+                    ${progress.progress >= 100 ? '🏆 Meta Atingida!' : `${progress.progress.toFixed(0)}% completo`}
+                </div>
+
+                <div class="goal-actions">
+                    ${goal.status === 'active' ? `
+                        <button class="btn-small" onclick="completeGoal(${goal.id})">✓ Completar</button>
+                    ` : `
+                        <button class="btn-small" onclick="reactivateGoal(${goal.id})">↻ Reativar</button>
+                    `}
+                    <button class="btn-small" onclick="deleteGoal(${goal.id})">🗑️ Deletar</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // ====== AÇÕES ======
+    function completeGoal(goalId) {
+        const goal = goals.find(g => g.id === goalId);
+        if (goal) {
+            goal.status = 'completed';
+            
+            // Atualizar no backend se disponível
+            if (USE_API && isOnline) {
+                updateGoalOnAPI(goalId, { status: 'completed' }).then(success => {
+                    if (success) console.log('✅ Meta marcada como concluída no backend');
+                    saveGoals();
+                    renderGoals();
+                });
+            } else {
+                saveGoals();
+                renderGoals();
+            }
+        }
+    }
+
+    function reactivateGoal(goalId) {
+        const goal = goals.find(g => g.id === goalId);
+        if (goal) {
+            goal.status = 'active';
+            
+            // Atualizar no backend se disponível
+            if (USE_API && isOnline) {
+                updateGoalOnAPI(goalId, { status: 'active' }).then(success => {
+                    if (success) console.log('✅ Meta reativada no backend');
+                    saveGoals();
+                    renderGoals();
+                });
+            } else {
+                saveGoals();
+                renderGoals();
+            }
+        }
+    }
+
+    function deleteGoal(goalId) {
+        if (confirm('Tem certeza que deseja deletar esta meta?')) {
+            // Deletar no backend se disponível
+            if (USE_API && isOnline) {
+                deleteGoalOnAPI(goalId).then(success => {
+                    if (success) {
+                        console.log('✅ Meta deletada do backend');
+                    } else {
+                        console.log('⚠️ Falha ao deletar do backend, deletando localmente');
+                    }
+                    
+                    goals = goals.filter(g => g.id !== goalId);
+                    delete registries[goalId];
+                    saveGoals();
+                    saveRegistries();
+                    renderGoals();
+                });
+            } else {
+                // Fallback: apenas localStorage
+                goals = goals.filter(g => g.id !== goalId);
+                delete registries[goalId];
+                saveGoals();
+                saveRegistries();
+                renderGoals();
+            }
+        }
+    }
+
+    // ====== MODAL ======
+    function openGoalModal() {
+        document.getElementById('goalModal').classList.add('active');
+    }
+
+    function closeGoalModal() {
+        document.getElementById('goalModal').classList.remove('active');
+    }
+
+    function confirmAddGoal() {
+        const title = document.getElementById('goalNameInput').value.trim();
+        const description = document.getElementById('goalDescInput').value.trim();
+        const days = parseInt(document.getElementById('goalDaysInput').value);
+        const emoji = document.getElementById('goalEmojiInput').value.trim();
+
+        if (!title || !description || !days) {
+            alert('Preencha todos os campos obrigatórios');
+            return;
+        }
+
+        // Default daily goal
+        const startDate = new Date().toISOString().split('T')[0];
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + days);
+
+        const newGoal = {
+            title: title,
+            description: description,
+            emoji: emoji,
+            type: 'daily',
+            unit: 'vezes',
+            targetValue: 1,
+            startDate: startDate,
+            endDate: endDate.toISOString().split('T')[0],
+            period: 'day',
+            status: 'active',
+            priority: 3
+        };
+
+        // Criar no backend se disponível
+        if (USE_API && isOnline) {
+            createGoalOnAPI(newGoal).then(createdGoal => {
+                if (createdGoal) {
+                    console.log('✅ Meta criada no backend');
+                    const localGoal = {
+                        id: createdGoal.id,
+                        ...newGoal
+                    };
+                    goals.push(localGoal);
+                    registries[localGoal.id] = [];
+                } else {
+                    console.log('⚠️ Falha ao criar no backend, criando localmente');
+                    const localGoal = {
+                        id: Date.now(),
+                        ...newGoal
+                    };
+                    goals.push(localGoal);
+                    registries[localGoal.id] = [];
+                }
+                
+                saveGoals();
+                saveRegistries();
+                renderGoals();
+                closeGoalModal();
+
+                document.getElementById('goalNameInput').value = '';
+                document.getElementById('goalDescInput').value = '';
+                document.getElementById('goalDaysInput').value = '';
+                document.getElementById('goalEmojiInput').value = '';
+            });
+        } else {
+            // Fallback: apenas localStorage
+            const localGoal = {
+                id: Date.now(),
+                ...newGoal
+            };
+            goals.push(localGoal);
+            registries[localGoal.id] = [];
+            saveGoals();
+            saveRegistries();
+            renderGoals();
+            closeGoalModal();
+
+            document.getElementById('goalNameInput').value = '';
+            document.getElementById('goalDescInput').value = '';
+            document.getElementById('goalDaysInput').value = '';
+            document.getElementById('goalEmojiInput').value = '';
+        }
+    }
+
+    // ====== INICIALIZAR ======
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Detectar mudança de conexão
+        window.addEventListener('online', () => {
+            isOnline = true;
+            console.log('🟢 Online - Sincronizando com backend');
+            loadGoals().then(() => renderGoals());
+        });
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            console.log('🔴 Offline - Usando localStorage');
+        });
+        
+        await loadGoals();
+        renderGoals();
+    });
+</script>
+
+</body>
+</html>
