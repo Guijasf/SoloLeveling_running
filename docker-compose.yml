@@ -1,0 +1,55 @@
+services:
+  # Backend FastAPI
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sololeveling-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+      - ./frontend-react/public:/app/frontend-react/public
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - DATABASE_URL=sqlite:///./data/sololeveling.db
+    networks:
+      - sololeveling-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend React (Opcional)
+  frontend:
+    image: node:20-alpine
+    container_name: sololeveling-frontend
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-react:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+      - BROWSER=none
+    networks:
+      - sololeveling-network
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  sololeveling-network:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
