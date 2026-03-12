@@ -1,5 +1,8 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Box, Button, Typography, IconButton } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import AuthContext from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
 import './Header.css';
@@ -14,42 +17,69 @@ function Header({ userName }) {
   };
 
   return (
-    <header className="header">
-      <div className="header-left">
-        <h1 className="logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
-          🎮 SoloLeveling
-        </h1>
-      </div>
-      <nav className="header-nav">
-        <button className="nav-link" onClick={() => navigate('/dashboard')}>
-          📊 Dashboard
-        </button>
-        <button className="nav-link" onClick={() => navigate('/profile')}>
-          👤 Perfil
-        </button>
-        <button className="nav-link" onClick={() => navigate('/history')}>
-          📜 Histórico
-        </button>
-      </nav>
-      <div className="header-right">
-        <span className="user-name">{userName}</span>
-        <NotificationBell />
-        <button
-          className="btn-icon"
-          onClick={() => navigate('/settings')}
-          title="Configurações"
-        >
-          ⚙️
-        </button>
-        <button
-          className="btn-icon"
-          onClick={handleLogout}
-          title="Sair"
-        >
-          🚪
-        </button>
-      </div>
-    </header>
+    <AppBar position="static" className="header">
+      <Toolbar>
+        <Box className="header-left" sx={{ flex: 1 }}>
+          <Typography
+            variant="h5"
+            className="logo"
+            onClick={() => navigate('/dashboard')}
+            sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            🎮 SoloLeveling
+          </Typography>
+        </Box>
+        
+        <Box className="header-nav" component="nav" sx={{ display: 'flex', gap: 2, flex: 1 }}>
+          <Button
+            className="nav-link"
+            color="inherit"
+            onClick={() => navigate('/dashboard')}
+          >
+            📊 Dashboard
+          </Button>
+          <Button
+            className="nav-link"
+            color="inherit"
+            onClick={() => navigate('/profile')}
+          >
+            👤 Perfil
+          </Button>
+          <Button
+            className="nav-link"
+            color="inherit"
+            onClick={() => navigate('/history')}
+          >
+            📜 Histórico
+          </Button>
+        </Box>
+
+        <Box className="header-right" sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography variant="body2" className="user-name">
+            {userName}
+          </Typography>
+          <NotificationBell />
+          <IconButton
+            className="btn-icon"
+            color="inherit"
+            onClick={() => navigate('/settings')}
+            title="Configurações"
+            size="small"
+          >
+            <SettingsIcon />
+          </IconButton>
+          <IconButton
+            className="btn-icon"
+            color="inherit"
+            onClick={handleLogout}
+            title="Sair"
+            size="small"
+          >
+            <LogoutIcon />
+          </IconButton>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }
 

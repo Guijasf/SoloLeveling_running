@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Box, Button, Badge, Menu, MenuItem, Typography, Stack, Paper, Divider, Chip } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import AuthContext from '../context/AuthContext';
 import api from '../utils/api';
 import './NotificationBell.css';
@@ -7,7 +9,8 @@ function NotificationBell() {
   const { user } = useContext(AuthContext);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openMenu = Boolean(anchorEl);
 
   useEffect(() => {
     loadNotifications();
@@ -58,59 +61,102 @@ function NotificationBell() {
     return icons[type] || '🔔';
   };
 
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <div className="notification-bell">
-      <button
+    <Box className="notification-bell">
+      <Button
         className="bell-button"
-        onClick={() => setShowDropdown(!showDropdown)}
+        onClick={handleMenuOpen}
+        sx={{ position: 'relative', minWidth: 'auto' }}
       >
-        🔔
-        {unreadCount > 0 && (
-          <span className="notification-badge">{unreadCount}</span>
-        )}
-      </button>
+        <Badge badgeContent={unreadCount} color="error">
+          <NotificationsIcon />
+        </Badge>
+      </Button>
 
-      {showDropdown && (
-        <div className="notification-dropdown">
-          <div className="notification-header">
-            <h3>Notificações</h3>
+      <Menu
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleMenuClose}
+        PaperProps={{
+          sx: { width: 350, maxHeight: 400, borderRadius: 2 }
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              Notificações
+            </Typography>
             {unreadCount > 0 && (
-              <button className="mark-all-read" onClick={markAllAsRead}>
+              <Button
+                size="small"
+                onClick={markAllAsRead}
+                sx={{ fontSize: '12px' }}
+              >
                 Marcar todas como lidas
-              </button>
+              </Button>
             )}
-          </div>
+          </Box>
+          <Divider />
+        </Box>
 
-          <div className="notification-list">
-            {notifications.length === 0 ? (
-              <div className="empty-notifications">
-                <p>📭 Nenhuma notificação</p>
-              </div>
-            ) : (
-              notifications.map((notif) => (
-                <div
-                  key={notif.id}
-                  className={`notification-item ${notif.read ? 'read' : 'unread'}`}
-                  onClick={() => !notif.read && markAsRead(notif.id)}
-                >
-                  <div className="notification-icon">
+        <Box sx={{ maxHeight: 350, overflow: 'auto' }}>
+          {notifications.length === 0 ? (
+            <Box className="empty-notifications" sx={{ p: 3, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                📭 Nenhuma notificação
+              </Typography>
+            </Box>
+          ) : (
+            notifications.map((notif) => (
+              <Paper
+                key={notif.id}
+                className={`notification-item ${notif.read ? 'read' : 'unread'}`}
+                onClick={() => !notif.read && markAsRead(notif.id)}
+                sx={{
+                  m: 1,
+                  p: 2,
+                  borderLeft: `4px solid ${notif.read ? '#ccc' : '#667eea'}`,
+                  bgcolor: notif.read ? '#f5f5f5' : 'primary.light',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    boxShadow: 1
+                  }
+                }}
+              >
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box className="notification-icon" sx={{ fontSize: '20px', flexShrink: 0 }}>
                     {getNotificationIcon(notif.type)}
-                  </div>
-                  <div className="notification-content">
-                    <h4>{notif.title}</h4>
-                    <p>{notif.message}</p>
-                    <span className="notification-time">
+                  </Box>
+                  <Box className="notification-content" sx={{ flex: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                      {notif.title}
+                    </Typography>
+                    <Typography variant="caption" display="block" sx={{ mb: 0.5, color: 'text.secondary' }}>
+                      {notif.message}
+                    </Typography>
+                    <Typography variant="caption" className="notification-time" sx={{ fontSize: '11px', color: 'text.disabled' }}>
                       {new Date(notif.created_at).toLocaleString('pt-BR')}
-                    </span>
-                  </div>
-                  {!notif.read && <div className="unread-dot"></div>}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+                    </Typography>
+                  </Box>
+                  {!notif.read && (
+                    <Box className="unread-dot" sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'error.main', mt: 1, flexShrink: 0 }} />
+                  )}
+                </Box>
+              </Paper>
+            ))
+          )}
+        </Box>
+      </Menu>
+    </Box>
   );
 }
 

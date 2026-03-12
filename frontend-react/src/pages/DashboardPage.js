@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Container, Grid, Paper, Typography, CircularProgress, Alert } from '@mui/material';
 import AuthContext from '../context/AuthContext';
 import api from '../utils/api';
 import Header from '../components/Header';
 import ProfileCard from '../components/ProfileCard';
 import RadarChart from '../components/RadarChart';
-import MissionsCard from '../components/MissionsCard';
 import AchievementsCard from '../components/AchievementsCard';
 import './DashboardPage.css';
 
@@ -62,33 +62,38 @@ function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Carregando dashboard...</p>
-      </div>
+      <Box className="loading-container" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Carregando dashboard...</Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="dashboard-page">
+    <Box className="dashboard-page">
       <Header userName={user?.name} onSettingsClick={() => navigate('/settings')} />
 
-      <div className="dashboard-container">
-        {error && <div className="error-banner">{error}</div>}
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
-        <div className="main-grid">
-          <div className="left-column">
-            <ProfileCard data={dashboardData} />
-            <RadarChart data={dashboardData} />
-          </div>
+        <Grid container spacing={3} className="main-grid">
+          <Grid item xs={12} md={6} className="left-column">
+            <Paper sx={{ p: 2, borderRadius: 2 }}>
+              <ProfileCard data={dashboardData} />
+            </Paper>
+            <Paper sx={{ p: 2, borderRadius: 2, mt: 3 }}>
+              <RadarChart data={dashboardData} />
+            </Paper>
+          </Grid>
 
-          <div className="right-column">
-            <MissionsCard data={dashboardData} />
-            <AchievementsCard data={dashboardData} />
-          </div>
-        </div>
-      </div>
-    </div>
+          <Grid item xs={12} md={6} className="right-column">
+            <Paper sx={{ p: 2, borderRadius: 2 }}>
+              <AchievementsCard data={dashboardData} />
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 }
 

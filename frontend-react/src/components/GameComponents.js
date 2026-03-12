@@ -1,5 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+  Typography, 
+  Button, 
+  Grid, 
+  TextField, 
+  Select, 
+  MenuItem, 
+  Stack, 
+  Paper, 
+  FormControl, 
+  InputLabel, 
+  Chip, 
+  LinearProgress, 
+  CircularProgress,
+  Alert 
+} from '@mui/material';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -87,292 +106,160 @@ export const GoalsComponent = ({ userId }) => {
   };
 
   return (
-    <div className="goals-container">
-      <h2>🎯 Minhas Metas</h2>
+    <Box>
+      <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+        🎯 Minhas Metas
+      </Typography>
 
       {stats && (
-        <div className="goals-stats">
-          <div className="stat-card">
-            <span className="stat-value">{stats.total_goals}</span>
-            <span className="stat-label">Total</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-value">{stats.completed_goals}</span>
-            <span className="stat-label">Completas</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-value">{stats.completion_rate}%</span>
-            <span className="stat-label">Taxa</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-value">+{stats.total_xp_earned}</span>
-            <span className="stat-label">XP Ganho</span>
-          </div>
-        </div>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          {[
+            { label: 'Total', value: stats.total_goals },
+            { label: 'Completas', value: stats.completed_goals },
+            { label: 'Taxa', value: `${stats.completion_rate}%` },
+            { label: 'XP Ganho', value: `+${stats.total_xp_earned}` }
+          ].map((stat, idx) => (
+            <Grid item xs={6} sm={3} key={idx}>
+              <Paper sx={{ p: 2, textAlign: 'center', borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {stat.label}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       )}
 
-      <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
+      <Button
+        variant="contained"
+        onClick={() => setShowForm(!showForm)}
+        sx={{ mb: 2 }}
+        fullWidth
+      >
         {showForm ? 'Cancelar' : '+ Nova Meta'}
-      </button>
+      </Button>
 
       {showForm && (
-        <div className="goal-form">
-          <input
-            type="text"
-            placeholder="Título da meta"
-            value={newGoal.title}
-            onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
-          />
-          <textarea
-            placeholder="Descrição"
-            value={newGoal.description}
-            onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
-          />
-          <select
-            value={newGoal.category}
-            onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
-          >
-            <option value="other">Outro</option>
-            <option value="financial">Financeiro</option>
-            <option value="weight">Peso</option>
-            <option value="habit">Hábito</option>
-            <option value="career">Carreira</option>
-            <option value="health">Saúde</option>
-            <option value="relationships">Relacionamentos</option>
-            <option value="learning">Aprendizado</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Meta (ex: 5000 ou 75kg)"
-            value={newGoal.target_value}
-            onChange={(e) => setNewGoal({ ...newGoal, target_value: e.target.value })}
-          />
-          <input
-            type="range"
-            min="1"
-            max="5"
-            value={newGoal.priority}
-            onChange={(e) => setNewGoal({ ...newGoal, priority: parseInt(e.target.value) })}
-          />
-          <span>Prioridade: {newGoal.priority}/5</span>
-          <button onClick={createGoal}>Criar Meta</button>
-        </div>
+        <Card sx={{ mb: 3, borderRadius: 2 }}>
+          <CardContent>
+            <Stack spacing={2}>
+              <TextField
+                fullWidth
+                label="Título da meta"
+                value={newGoal.title}
+                onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
+              />
+              <TextField
+                fullWidth
+                multiline
+                rows={2}
+                label="Descrição"
+                value={newGoal.description}
+                onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
+              />
+              <FormControl fullWidth>
+                <InputLabel>Categoria</InputLabel>
+                <Select
+                  value={newGoal.category}
+                  label="Categoria"
+                  onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
+                >
+                  <MenuItem value="other">Outro</MenuItem>
+                  <MenuItem value="financial">Financeiro</MenuItem>
+                  <MenuItem value="weight">Peso</MenuItem>
+                  <MenuItem value="habit">Hábito</MenuItem>
+                  <MenuItem value="career">Carreira</MenuItem>
+                  <MenuItem value="health">Saúde</MenuItem>
+                  <MenuItem value="relationships">Relacionamentos</MenuItem>
+                  <MenuItem value="learning">Aprendizado</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                fullWidth
+                type="number"
+                label="Meta (ex: 5000 ou 75kg)"
+                value={newGoal.target_value}
+                onChange={(e) => setNewGoal({ ...newGoal, target_value: e.target.value })}
+              />
+              <Box>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  Prioridade: {newGoal.priority}/5
+                </Typography>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={newGoal.priority}
+                  onChange={(e) => setNewGoal({ ...newGoal, priority: parseInt(e.target.value) })}
+                  style={{ width: '100%' }}
+                />
+              </Box>
+              <Button variant="contained" color="success" onClick={createGoal}>
+                Criar Meta
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
       )}
 
-      <div className="goals-list">
+      <Grid container spacing={2}>
         {loading ? (
-          <p>Carregando...</p>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          </Grid>
         ) : goals.length === 0 ? (
-          <p>Nenhuma meta ainda. Crie sua primeira!</p>
+          <Grid item xs={12}>
+            <Alert severity="info">Nenhuma meta ainda. Crie sua primeira!</Alert>
+          </Grid>
         ) : (
           goals.map((goal) => (
-            <div key={goal.id} className={`goal-card status-${goal.status}`}>
-              <div className="goal-header">
-                <h3>
-                  {categoryEmoji[goal.category]} {goal.title}
-                </h3>
-                <span className="goal-xp">+{goal.reward_xp} XP</span>
-              </div>
-              <p>{goal.description}</p>
-              <div className="goal-progress">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{
-                      width: goal.target_value
-                        ? `${(goal.current_progress / goal.target_value) * 100}%`
-                        : '0%'
-                    }}
-                  ></div>
-                </div>
-                <span className="progress-text">
-                  {goal.current_progress} / {goal.target_value || 'N/A'}
-                </span>
-              </div>
-              <div className="goal-actions">
-                <span className={`status-badge status-${goal.status}`}>
-                  {goal.status}
-                </span>
-                {goal.status !== 'completed' && (
-                  <button onClick={() => completeGoal(goal.id)} className="btn-success">
-                    ✓ Completar
-                  </button>
-                )}
-              </div>
-            </div>
+            <Grid item xs={12} key={goal.id}>
+              <Card sx={{ borderLeft: `4px solid ${goal.status === 'completed' ? '#22C55E' : '#3B82F6'}`, borderRadius: 2 }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 1.5 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                      {categoryEmoji[goal.category]} {goal.title}
+                    </Typography>
+                    <Chip label={`+${goal.reward_xp} XP`} color="success" size="small" />
+                  </Box>
+                  <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
+                    {goal.description}
+                  </Typography>
+                  <Box sx={{ mb: 2 }}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={goal.target_value ? (goal.current_progress / goal.target_value) * 100 : 0}
+                      sx={{ mb: 1, borderRadius: 4 }}
+                    />
+                    <Typography variant="caption" color="text.secondary">
+                      {goal.current_progress} / {goal.target_value || 'N/A'}
+                    </Typography>
+                  </Box>
+                  <Stack direction="row" spacing={1}>
+                    <Chip
+                      label={goal.status}
+                      variant="outlined"
+                      color={goal.status === 'completed' ? 'success' : 'default'}
+                      size="small"
+                    />
+                    {goal.status !== 'completed' && (
+                      <Button size="small" variant="contained" color="success" onClick={() => completeGoal(goal.id)}>
+                        ✓ Completar
+                      </Button>
+                    )}
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
           ))
         )}
-      </div>
-
-      <style>{`
-        .goals-container {
-          padding: 20px;
-          background: #0B0F1A;
-          border-radius: 12px;
-          color: #fff;
-        }
-
-        .goals-stats {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-          gap: 15px;
-          margin: 20px 0;
-        }
-
-        .stat-card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 15px;
-          background: rgba(59, 130, 246, 0.1);
-          border-radius: 8px;
-          border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .stat-value {
-          font-size: 24px;
-          font-weight: bold;
-          color: #3B82F6;
-        }
-
-        .stat-label {
-          font-size: 12px;
-          color: #999;
-          margin-top: 5px;
-        }
-
-        .btn-primary {
-          padding: 10px 20px;
-          background: #3B82F6;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          font-weight: bold;
-          margin-bottom: 20px;
-        }
-
-        .goal-form {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          padding: 15px;
-          background: rgba(59, 130, 246, 0.05);
-          border-radius: 8px;
-          margin-bottom: 20px;
-        }
-
-        .goal-form input,
-        .goal-form textarea,
-        .goal-form select {
-          padding: 10px;
-          background: rgba(255, 255, 255, 0.05);
-          color: white;
-          border: 1px solid rgba(59, 130, 246, 0.3);
-          border-radius: 4px;
-        }
-
-        .goal-form button {
-          padding: 10px;
-          background: #3B82F6;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-
-        .goals-list {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-        }
-
-        .goal-card {
-          padding: 15px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(59, 130, 246, 0.3);
-          border-radius: 8px;
-          border-left: 4px solid #3B82F6;
-        }
-
-        .goal-card.status-completed {
-          border-left-color: #22C55E;
-          opacity: 0.7;
-        }
-
-        .goal-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 10px;
-        }
-
-        .goal-xp {
-          background: rgba(34, 197, 94, 0.2);
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-weight: bold;
-          color: #22C55E;
-        }
-
-        .goal-progress {
-          margin: 10px 0;
-        }
-
-        .progress-bar {
-          width: 100%;
-          height: 8px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-          overflow: hidden;
-        }
-
-        .progress-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #3B82F6, #8B5CF6);
-          transition: width 0.3s ease;
-        }
-
-        .progress-text {
-          font-size: 12px;
-          color: #999;
-          margin-top: 5px;
-          display: block;
-        }
-
-        .goal-actions {
-          display: flex;
-          gap: 10px;
-          margin-top: 10px;
-        }
-
-        .status-badge {
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 12px;
-        }
-
-        .status-badge.status-completed {
-          background: rgba(34, 197, 94, 0.2);
-          color: #22C55E;
-        }
-
-        .status-badge.status-in_progress {
-          background: rgba(59, 130, 246, 0.2);
-          color: #3B82F6;
-        }
-
-        .btn-success {
-          padding: 6px 12px;
-          background: #22C55E;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 12px;
-        }
-      `}</style>
-    </div>
+      </Grid>
+    </Box>
   );
 };
 
@@ -406,196 +293,88 @@ export const StreakComponent = ({ userId }) => {
     }
   };
 
-  if (loading || !streak) return <div>Carregando streak...</div>;
+  if (loading || !streak) return <CircularProgress />;
 
   const display = streak.display || {};
 
   return (
-    <div className="streak-container">
-      <h2>🔥 Sua Sequência</h2>
+    <Box>
+      <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+        🔥 Sua Sequência
+      </Typography>
 
-      <div className="streak-main">
-        <div className="streak-circle">
-          <div className="streak-content">
-            <div className="streak-badge">{display.badge}</div>
-            <div className="streak-days">{streak.current_streak}</div>
-            <div className="streak-label">Dias</div>
-          </div>
-        </div>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={6}>
+          <Card sx={{ textAlign: 'center', borderRadius: 2 }}>
+            <CardContent>
+              <Typography variant="h3" sx={{ mb: 1 }}>
+                {display.badge}
+              </Typography>
+              <Typography variant="h2" sx={{ fontWeight: 'bold', color: 'warning.main', mb: 1 }}>
+                {streak.current_streak}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                Dias
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                {display.level}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-        <div className="streak-details">
-          <div className="detail-row">
-            <span>Melhor Série</span>
-            <strong>{streak.best_streak} dias</strong>
-          </div>
-          <div className="detail-row">
-            <span>Nível</span>
-            <strong>{display.level}</strong>
-          </div>
-          <div className="detail-row">
-            <span>Multiplicador XP</span>
-            <strong>{display.xp_multiplier}x</strong>
-          </div>
-          {bonus && (
-            <>
-              <div className="detail-row">
-                <span>Bônus XP Ativo</span>
-                <strong>+{bonus.bonus_xp} XP</strong>
-              </div>
-              {bonus.milestone && bonus.milestone.milestone_reached && (
-                <div className="milestone-alert">
-                  <p>🎉 {bonus.milestone.message}</p>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </div>
+        <Grid item xs={12} sm={6}>
+          <Stack spacing={2}>
+            <DetailRow label="Melhor Série" value={`${streak.best_streak} dias`} />
+            <DetailRow label="Nível" value={display.level} />
+            <DetailRow label="Multiplicador XP" value={`${display.xp_multiplier}x`} />
+            {bonus && (
+              <>
+                <DetailRow label="Bônus XP Ativo" value={`+${bonus.bonus_xp} XP`} />
+                {bonus.milestone && bonus.milestone.milestone_reached && (
+                  <Alert severity="success" sx={{ mt: 1 }}>
+                    <Typography variant="body2">🎉 {bonus.milestone.message}</Typography>
+                  </Alert>
+                )}
+              </>
+            )}
+          </Stack>
+        </Grid>
+      </Grid>
 
-      <div className="leaderboard">
-        <h3>🏆 Top 10</h3>
-        <div className="leaderboard-list">
-          {leaderboard.map((entry, idx) => (
-            <div
-              key={idx}
-              className={`leaderboard-entry ${entry.user_id === userId ? 'my-entry' : ''}`}
-            >
-              <span className="position">#{entry.position}</span>
-              <span className="badge">{entry.badge}</span>
-              <span className="streak">{entry.streak} dias</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <style>{`
-        .streak-container {
-          padding: 20px;
-          background: #0B0F1A;
-          border-radius: 12px;
-          color: #fff;
-        }
-
-        .streak-main {
-          display: flex;
-          gap: 30px;
-          margin: 20px 0;
-          align-items: center;
-        }
-
-        .streak-circle {
-          position: relative;
-          width: 180px;
-          height: 180px;
-          background: conic-gradient(
-            #FF6B6B 0deg,
-            #4ECDC4 90deg,
-            #45B7D1 180deg,
-            #96CEB4 270deg,
-            #FF6B6B 360deg
-          );
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .streak-content {
-          width: 160px;
-          height: 160px;
-          background: #0B0F1A;
-          border-radius: 50%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .streak-badge {
-          font-size: 48px;
-        }
-
-        .streak-days {
-          font-size: 42px;
-          font-weight: bold;
-          color: #3B82F6;
-        }
-
-        .streak-label {
-          font-size: 12px;
-          color: #999;
-        }
-
-        .streak-details {
-          flex: 1;
-        }
-
-        .detail-row {
-          display: flex;
-          justify-content: space-between;
-          padding: 10px 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .milestone-alert {
-          background: rgba(34, 197, 94, 0.1);
-          border-left: 3px solid #22C55E;
-          padding: 10px;
-          margin-top: 10px;
-          border-radius: 4px;
-        }
-
-        .milestone-alert p {
-          margin: 0;
-          color: #22C55E;
-          font-weight: bold;
-        }
-
-        .leaderboard {
-          margin-top: 30px;
-        }
-
-        .leaderboard-list {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .leaderboard-entry {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          padding: 12px;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 6px;
-          transition: background 0.2s;
-        }
-
-        .leaderboard-entry:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        .leaderboard-entry.my-entry {
-          background: rgba(59, 130, 246, 0.2);
-          border: 1px solid rgba(59, 130, 246, 0.5);
-        }
-
-        .position {
-          font-weight: bold;
-          width: 40px;
-        }
-
-        .badge {
-          font-size: 24px;
-          width: 30px;
-        }
-
-        .streak {
-          flex: 1;
-          font-weight: bold;
-        }
-      `}</style>
-    </div>
+      {leaderboard.length > 0 && (
+        <Card sx={{ borderRadius: 2 }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+              🏆 Top 10
+            </Typography>
+            <Stack spacing={1}>
+              {leaderboard.map((entry, idx) => (
+                <Paper
+                  key={idx}
+                  sx={{
+                    p: 1.5,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    bgcolor: entry.user_id === userId ? 'primary.light' : 'action.hover',
+                    borderRadius: 1
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    #{entry.position}
+                  </Typography>
+                  <Typography variant="body2">{entry.badge}</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {entry.streak} dias
+                  </Typography>
+                </Paper>
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
+    </Box>
   );
 };
 
@@ -650,182 +429,100 @@ export const MissionsComponent = ({ userId }) => {
   };
 
   return (
-    <div className="missions-container">
-      <h2>🎮 Missões do Dia</h2>
+    <Box>
+      <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+        🎮 Missões do Dia
+      </Typography>
 
       {dailyStats && (
-        <div className="mission-stats">
-          <div className="stat">
-            <span className="value">{dailyStats.missions_completed}/{dailyStats.missions_today}</span>
-            <span className="label">Completadas</span>
-          </div>
-          <div className="stat">
-            <span className="value">{dailyStats.completion_rate}%</span>
-            <span className="label">Taxa</span>
-          </div>
-          <div className="stat">
-            <span className="value">+{dailyStats.total_xp_with_bonus}</span>
-            <span className="label">XP Total</span>
-          </div>
-        </div>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          {[
+            { label: 'Completadas', value: `${dailyStats.missions_completed}/${dailyStats.missions_today}` },
+            { label: 'Taxa', value: `${dailyStats.completion_rate}%` },
+            { label: 'XP Total', value: `+${dailyStats.total_xp_with_bonus}` }
+          ].map((stat, idx) => (
+            <Grid item xs={6} sm={4} key={idx}>
+              <Paper sx={{ p: 2, textAlign: 'center', borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {stat.label}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       )}
 
-      <div className="missions-list">
+      <Grid container spacing={2}>
         {loading ? (
-          <p>Carregando...</p>
+          <Grid item xs={12}>
+            <CircularProgress />
+          </Grid>
         ) : missions.length === 0 ? (
-          <p>Nenhuma missão gerada ainda. Complete uma métrica para gerar!</p>
+          <Grid item xs={12}>
+            <Alert severity="info">Nenhuma missão gerada ainda. Complete uma métrica para gerar!</Alert>
+          </Grid>
         ) : (
           missions.map((mission) => (
-            <div key={mission.id} className={`mission-card ${mission.completed ? 'completed' : ''}`}>
-              <div className="mission-header">
-                <h3>{mission.title}</h3>
-                <span className="xp-reward">+{mission.xp_reward} XP</span>
-              </div>
-              <p className="description">{mission.description}</p>
-              <div className="mission-footer">
-                <span
-                  className="area-tag"
-                  style={{ backgroundColor: areaColor[mission.area_name] || '#666' }}
-                >
-                  {mission.area_name}
-                </span>
-                <span className="difficulty">
-                  {mission.difficulty === 'easy' && '⭐'}
-                  {mission.difficulty === 'medium' && '⭐⭐'}
-                  {mission.difficulty === 'hard' && '⭐⭐⭐'}
-                </span>
-                {!mission.completed && (
-                  <button
-                    onClick={() => completeMission(mission.id)}
-                    className="btn-complete"
-                  >
-                    ✓ Completada
-                  </button>
-                )}
-              </div>
-            </div>
+            <Grid item xs={12} sm={6} md={4} key={mission.id}>
+              <Card
+                sx={{
+                  opacity: mission.completed ? 0.6 : 1,
+                  borderRadius: 2,
+                  borderLeft: `4px solid ${areaColor[mission.area_name] || '#666'}`
+                }}
+              >
+                <CardContent>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 1 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                      {mission.title}
+                    </Typography>
+                    <Chip label={`+${mission.xp_reward} XP`} size="small" color="warning" />
+                  </Box>
+                  <Typography variant="body2" sx={{ mb: 1.5, color: 'text.secondary' }}>
+                    {mission.description}
+                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
+                    <Chip
+                      label={mission.area_name}
+                      size="small"
+                      sx={{
+                        backgroundColor: areaColor[mission.area_name] || '#666',
+                        color: '#fff'
+                      }}
+                    />
+                    <Chip
+                      label={
+                        mission.difficulty === 'easy'
+                          ? '⭐'
+                          : mission.difficulty === 'medium'
+                            ? '⭐⭐'
+                            : '⭐⭐⭐'
+                      }
+                      size="small"
+                      variant="outlined"
+                    />
+                  </Stack>
+                  {!mission.completed && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => completeMission(mission.id)}
+                      fullWidth
+                      size="small"
+                    >
+                      ✓ Completada
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
           ))
         )}
-      </div>
-
-      <style>{`
-        .missions-container {
-          padding: 20px;
-          background: #0B0F1A;
-          border-radius: 12px;
-          color: #fff;
-        }
-
-        .mission-stats {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 15px;
-          margin: 20px 0;
-        }
-
-        .stat {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 15px;
-          background: rgba(59, 130, 246, 0.1);
-          border-radius: 8px;
-          border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .stat .value {
-          font-size: 28px;
-          font-weight: bold;
-          color: #3B82F6;
-        }
-
-        .stat .label {
-          font-size: 12px;
-          color: #999;
-          margin-top: 5px;
-        }
-
-        .missions-list {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-        }
-
-        .mission-card {
-          padding: 15px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(59, 130, 246, 0.3);
-          border-radius: 8px;
-          transition: all 0.2s;
-        }
-
-        .mission-card:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        .mission-card.completed {
-          opacity: 0.6;
-          background: rgba(34, 197, 94, 0.1);
-          border-color: rgba(34, 197, 94, 0.5);
-          text-decoration: line-through;
-        }
-
-        .mission-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 10px;
-        }
-
-        .xp-reward {
-          background: rgba(252, 202, 21, 0.2);
-          padding: 4px 8px;
-          border-radius: 4px;
-          color: #FACC15;
-          font-weight: bold;
-        }
-
-        .description {
-          font-size: 14px;
-          color: #ccc;
-          margin: 10px 0;
-        }
-
-        .mission-footer {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .area-tag {
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-size: 12px;
-          color: white;
-          font-weight: bold;
-        }
-
-        .difficulty {
-          flex: 1;
-        }
-
-        .btn-complete {
-          padding: 6px 12px;
-          background: #22C55E;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 12px;
-          font-weight: bold;
-        }
-
-        .btn-complete:hover {
-          background: #16a34a;
-        }
-      `}</style>
-    </div>
+      </Grid>
+    </Box>
   );
 };
 
@@ -859,68 +556,38 @@ export const StatisticsComponent = ({ userId }) => {
   };
 
   return (
-    <div className="stats-container">
-      <h2>📊 Estatísticas</h2>
-      <div className="stats-grid">
+    <Box>
+      <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+        📊 Estatísticas
+      </Typography>
+      <Grid container spacing={2}>
         {stats.map((stat, idx) => (
-          <div key={idx} className="stat-card">
-            <div className="stat-icon">{stat.icon}</div>
-            <div className="stat-info">
-              <span className="stat-value">{stat.value}</span>
-              <span className="stat-label">{stat.label}</span>
-            </div>
-          </div>
+          <Grid item xs={6} sm={3} key={idx}>
+            <Card sx={{ textAlign: 'center', borderRadius: 2 }}>
+              <CardContent>
+                <Typography variant="h4" sx={{ mb: 1 }}>
+                  {stat.icon}
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {stat.label}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </div>
-
-      <style>{`
-        .stats-container {
-          padding: 20px;
-          background: #0B0F1A;
-          border-radius: 12px;
-          color: #fff;
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 15px;
-          margin-top: 20px;
-        }
-
-        .stat-card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 20px;
-          background: rgba(59, 130, 246, 0.1);
-          border: 1px solid rgba(59, 130, 246, 0.3);
-          border-radius: 8px;
-          transition: all 0.2s;
-        }
-
-        .stat-card:hover {
-          background: rgba(59, 130, 246, 0.2);
-          border-color: rgba(59, 130, 246, 0.5);
-        }
-
-        .stat-icon {
-          font-size: 32px;
-          margin-bottom: 10px;
-        }
-
-        .stat-value {
-          font-size: 24px;
-          font-weight: bold;
-          color: #3B82F6;
-        }
-
-        .stat-label {
-          font-size: 12px;
-          color: #999;
-          margin-top: 5px;
-        }
-      `}</style>
-    </div>
+      </Grid>
+    </Box>
   );
 };
+
+const DetailRow = ({ label, value }) => (
+  <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
+    <Typography variant="body2">{label}</Typography>
+    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+      {value}
+    </Typography>
+  </Box>
+);

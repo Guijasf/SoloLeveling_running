@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Grid, CircularProgress, Typography } from '@mui/material';
 import AuthContext from '../context/AuthContext';
 import api from '../utils/api';
 import PremiumHeader from '../components/premium/PremiumHeader';
@@ -79,10 +80,12 @@ function DashboardPremium() {
 
   if (loading) {
     return (
-      <div className="loading-premium">
-        <div className="spinner-premium"></div>
-        <p className="text-gradient">Carregando evolução...</p>
-      </div>
+      <Box className="loading-premium" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Carregando evolução...
+        </Typography>
+      </Box>
     );
   }
 
@@ -92,7 +95,7 @@ function DashboardPremium() {
   const dailyProgress = totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(0) : 0;
 
   return (
-    <div className="dashboard-premium">
+    <Box className="dashboard-premium">
       <PremiumHeader
         userName={dashboardData.profile_name}
         level={dashboardData.level}
@@ -106,31 +109,39 @@ function DashboardPremium() {
         <LevelUpModal level={dashboardData.level} rank={dashboardData.rank} />
       )}
 
-      <div className="dashboard-grid">
-        <EvolutionCard
-          level={dashboardData.level}
-          rank={dashboardData.rank}
-          totalXp={dashboardData.total_xp}
-          currentXp={dashboardData.xp}
-          nextLevelXp={dashboardData.next_level_xp}
-          xpPercentage={xpPercentage}
-        />
+      <Grid container spacing={3} className="dashboard-grid" sx={{ p: 3 }}>
+        <Grid item xs={12} md={6}>
+          <EvolutionCard
+            level={dashboardData.level}
+            rank={dashboardData.rank}
+            totalXp={dashboardData.total_xp}
+            currentXp={dashboardData.xp}
+            nextLevelXp={dashboardData.next_level_xp}
+            xpPercentage={xpPercentage}
+          />
+        </Grid>
 
-        <StreakCard streak={dashboardData.streak} />
+        <Grid item xs={12} md={6}>
+          <StreakCard streak={dashboardData.streak} />
+        </Grid>
 
-        <DailyTasksCard
-          tasks={dashboardData.today_missions}
-          onTaskComplete={handleTaskComplete}
-        />
+        <Grid item xs={12} md={6}>
+          <DailyTasksCard
+            tasks={dashboardData.today_missions}
+            onTaskComplete={handleTaskComplete}
+          />
+        </Grid>
 
-        <DailyProgressCard
-          completedTasks={completedTasks}
-          totalTasks={totalTasks}
-          dailyProgress={dailyProgress}
-          lifeScore={dashboardData.life_score}
-        />
-      </div>
-    </div>
+        <Grid item xs={12} md={6}>
+          <DailyProgressCard
+            completedTasks={completedTasks}
+            totalTasks={totalTasks}
+            dailyProgress={dailyProgress}
+            lifeScore={dashboardData.life_score}
+          />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import './styles/designSystem.css';
-import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import SettingsPage from './pages/SettingsPage';
 import ProfilePage from './pages/ProfilePage';
 import HistoryPage from './pages/HistoryPage';
-import GameDashboard from './pages/GameDashboard';
 import AuthContext from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -57,8 +55,6 @@ function App() {
     <AuthContext.Provider value={{ user, token, login, logout }}>
       <Router>
         <Routes>
-          <Route path="/login" element={!token ? <LoginPage /> : <Navigate to="/game" />} />
-          <Route path="/game" element={<PrivateRoute><GameDashboard /></PrivateRoute>} />
           <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} />
           <Route path="/dashboard/classic" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
           <Route path="/ranking" element={<PrivateRoute><PlaceholderPage title="Ranking" /></PrivateRoute>} />
@@ -69,7 +65,7 @@ function App() {
           <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
           <Route path="/history" element={<PrivateRoute><HistoryPage /></PrivateRoute>} />
           <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
-          <Route path="/" element={token ? <Navigate to="/game" /> : <Navigate to="/login" />} />
+          <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/dashboard" />} />
         </Routes>
       </Router>
     </AuthContext.Provider>

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Container, Paper, Typography, Button, Stack, TextField } from '@mui/material';
 import AuthContext from '../context/AuthContext';
 import Header from '../components/Header';
 import './SettingsPage.css';
@@ -14,46 +15,72 @@ function SettingsPage() {
   };
 
   return (
-    <div className="settings-page">
+    <Box className="settings-page">
       <Header userName={user?.name} />
 
-      <div className="settings-container">
-        <div className="settings-box">
-          <h2>⚙️ Configurações</h2>
+      <Container maxWidth="sm" sx={{ py: 4 }}>
+        <Paper className="settings-box" sx={{ p: 3, borderRadius: 2 }}>
+          <Typography variant="h4" sx={{ mb: 3 }}>
+            ⚙️ Configurações
+          </Typography>
 
-          <div className="settings-section">
-            <h3>👤 Perfil</h3>
-            <div className="setting-item">
-              <label>Nome</label>
-              <p>{user?.name}</p>
-            </div>
-            <div className="setting-item">
-              <label>Email</label>
-              <p>{user?.email}</p>
-            </div>
-            <div className="setting-item">
-              <label>ID</label>
-              <p>{user?.id}</p>
-            </div>
-          </div>
+          <Box className="settings-section" sx={{ mb: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              👤 Perfil
+            </Typography>
+            <Stack spacing={2}>
+              <Box className="setting-item">
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  Nome
+                </Typography>
+                <Typography variant="body1">{user?.name}</Typography>
+              </Box>
+              <Box className="setting-item">
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  Email
+                </Typography>
+                <Typography variant="body1">{user?.email}</Typography>
+              </Box>
+              <Box className="setting-item">
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  ID
+                </Typography>
+                <Typography variant="body1">{user?.id}</Typography>
+              </Box>
+            </Stack>
+          </Box>
 
-          <div className="settings-section">
-            <h3>🔐 Segurança</h3>
-            <div className="setting-item">
-              <label>Senha</label>
-              <button className="btn-secondary">Alterar Senha</button>
-            </div>
-          </div>
+          <Box className="settings-section" sx={{ mb: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              🔐 Segurança
+            </Typography>
+            <Box className="setting-item">
+              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1 }}>
+                Senha
+              </Typography>
+              <Button variant="outlined" className="btn-secondary">
+                Alterar Senha
+              </Button>
+            </Box>
+          </Box>
 
-          <div className="settings-section danger">
-            <h3>⚠️ Perigo</h3>
-            <button onClick={handleLogout} className="btn-danger">
+          <Box className="settings-section danger" sx={{ p: 2, bgcolor: 'error.lighter', borderRadius: 1 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              ⚠️ Perigo
+            </Typography>
+            <Button 
+              variant="contained" 
+              color="error"
+              onClick={handleLogout}
+              className="btn-danger"
+              fullWidth
+            >
               Sair
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
   );
 }
 

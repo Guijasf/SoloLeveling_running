@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Box, Card, CardContent, Typography, Button, Grid, Stack, Paper, CircularProgress, Alert } from '@mui/material';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
@@ -33,227 +34,147 @@ export default function StreakDisplay({ userId }) {
     }
   };
 
-  if (loading) return <div style={styles.container}>Carregando...</div>;
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <div style={styles.container}>
-      <h2>🔥 Seu Streak</h2>
+    <Box>
+      <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+        🔥 Seu Streak
+      </Typography>
 
       {streak && (
-        <div style={styles.mainStreak}>
-          <div style={styles.streakBadge}>
-            <div style={styles.badgeEmoji}>{streak.display.badge}</div>
-            <div style={styles.streakNumber}>{streak.current_streak}</div>
-            <div style={styles.streakLabel}>DIAS</div>
-            <div style={styles.levelName}>{streak.display.level}</div>
-          </div>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6}>
+            <Card sx={{ borderRadius: 2 }}>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'primary.main', mb: 1 }}>
+                  {streak.display.badge}
+                </Typography>
+                <Typography variant="h2" sx={{ fontWeight: 'bold', color: 'warning.main', mb: 1 }}>
+                  {streak.current_streak}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  DIAS
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1, fontWeight: 'bold' }}>
+                  {streak.display.level}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-          <div style={styles.streakDetails}>
-            <div style={styles.detail}>
-              <span>💪 Melhor Streak: {streak.best_streak} dias</span>
-            </div>
-            <div style={styles.detail}>
-              <span>⚡ XP Multiplier: {streak.multiplier}x</span>
-            </div>
-            <div style={styles.detail}>
-              <span>📅 Última Atividade: {streak.last_activity}</span>
-            </div>
-          </div>
-        </div>
+          <Grid item xs={12} sm={6}>
+            <Stack spacing={2}>
+              <DetailRow label="💪 Melhor Streak" value={`${streak.best_streak} dias`} />
+              <DetailRow label="⚡ XP Multiplier" value={`${streak.multiplier}x`} />
+              <DetailRow label="📅 Última Atividade" value={streak.last_activity} />
+            </Stack>
+          </Grid>
+        </Grid>
       )}
 
       {bonus && (
-        <div style={styles.bonusSection}>
-          <h3>💰 Bonus Ativo</h3>
-          <div style={styles.bonusItem}>
-            <span>XP Extra: +{bonus.bonus_xp}</span>
-          </div>
-          <div style={styles.bonusItem}>
-            <span>Multiplicador: {bonus.multiplier}x</span>
-          </div>
+        <Card sx={{ mb: 3, borderRadius: 2, borderLeft: '4px solid #FACC15' }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+              💰 Bonus Ativo
+            </Typography>
+            <DetailRow label="XP Extra" value={`+${bonus.bonus_xp}`} />
+            <DetailRow label="Multiplicador" value={`${bonus.multiplier}x`} />
 
-          {bonus.milestone && bonus.milestone.milestone_reached && (
-            <div style={styles.milestoneAlert}>
-              <div style={styles.milestoneEmoji}>{bonus.milestone.emoji}</div>
-              <div>
-                <h4>{bonus.milestone.message}</h4>
-                <p>🎉 Você desbloqueou +{bonus.milestone.bonus_xp} XP!</p>
-              </div>
-            </div>
-          )}
-        </div>
+            {bonus.milestone && bonus.milestone.milestone_reached && (
+              <Alert severity="success" sx={{ mt: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  🎉 {bonus.milestone.message}
+                </Typography>
+                <Typography variant="caption">
+                  Você desbloqueou +{bonus.milestone.bonus_xp} XP!
+                </Typography>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       {leaderboard && (
-        <div style={styles.leaderboardSection}>
-          <h3>🏆 Leaderboard Top 10</h3>
-          <div style={styles.leaderboard}>
-            {leaderboard.leaderboard.map((user, idx) => (
-              <div
-                key={idx}
-                style={{
-                  ...styles.leaderboardItem,
-                  backgroundColor: idx === 0 ? '#FFD700' : idx === 1 ? '#C0C0C0' : idx === 2 ? '#CD7F32' : '#2d3436'
-                }}
-              >
-                <span style={styles.position}>#{user.position}</span>
-                <span style={styles.badge}>{user.badge}</span>
-                <span style={styles.streakCount}>{user.streak} dias</span>
-              </div>
-            ))}
-          </div>
+        <Card sx={{ borderRadius: 2 }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+              🏆 Leaderboard Top 10
+            </Typography>
 
-          {leaderboard.user_position && (
-            <div style={styles.userPosition}>
-              <h4>Sua Posição:</h4>
-              <div style={styles.userPositionItem}>
-                <span>#{leaderboard.user_position.position}</span>
-                <span>{leaderboard.user_position.streak} dias</span>
-              </div>
-            </div>
-          )}
-        </div>
+            <Stack spacing={1} sx={{ mb: 2 }}>
+              {leaderboard.leaderboard.map((user, idx) => {
+                const bgColor =
+                  idx === 0
+                    ? 'warning.light'
+                    : idx === 1
+                      ? 'info.light'
+                      : idx === 2
+                        ? 'error.light'
+                        : 'action.hover';
+
+                return (
+                  <Paper
+                    key={idx}
+                    sx={{
+                      p: 1.5,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      bgcolor: bgColor,
+                      borderRadius: 1
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      #{user.position}
+                    </Typography>
+                    <Typography variant="body2">{user.badge}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      {user.streak} dias
+                    </Typography>
+                  </Paper>
+                );
+              })}
+            </Stack>
+
+            {leaderboard.user_position && (
+              <Box sx={{ p: 1.5, bgcolor: 'primary.light', borderRadius: 1 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  Sua Posição:
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="body2">
+                    #{leaderboard.user_position.position}
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {leaderboard.user_position.streak} dias
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
       )}
 
-      <button onClick={loadStreakData} style={styles.refreshButton}>
+      <Button onClick={loadStreakData} variant="contained" fullWidth sx={{ mt: 2 }}>
         🔄 Atualizar
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }
 
-const styles = {
-  container: {
-    padding: '20px',
-    backgroundColor: '#1a1f2e',
-    borderRadius: '8px',
-    color: '#fff'
-  },
-  mainStreak: {
-    display: 'flex',
-    gap: '20px',
-    marginBottom: '20px',
-    flexWrap: 'wrap'
-  },
-  streakBadge: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2d3436',
-    padding: '30px',
-    borderRadius: '12px',
-    border: '3px solid #3B82F6',
-    minWidth: '150px'
-  },
-  badgeEmoji: {
-    fontSize: '48px',
-    marginBottom: '10px'
-  },
-  streakNumber: {
-    fontSize: '42px',
-    fontWeight: 'bold',
-    color: '#FACC15'
-  },
-  streakLabel: {
-    fontSize: '12px',
-    color: '#aaa',
-    marginTop: '5px'
-  },
-  levelName: {
-    fontSize: '16px',
-    color: '#3B82F6',
-    marginTop: '8px',
-    fontWeight: 'bold'
-  },
-  streakDetails: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    flex: 1,
-    minWidth: '200px'
-  },
-  detail: {
-    backgroundColor: '#2d3436',
-    padding: '15px',
-    borderRadius: '6px',
-    fontSize: '16px'
-  },
-  bonusSection: {
-    backgroundColor: '#2d3436',
-    padding: '20px',
-    borderRadius: '8px',
-    marginBottom: '20px',
-    borderLeft: '4px solid #FACC15'
-  },
-  bonusItem: {
-    padding: '10px 0',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#FACC15'
-  },
-  milestoneAlert: {
-    backgroundColor: '#1a3a2a',
-    padding: '15px',
-    borderRadius: '6px',
-    marginTop: '15px',
-    border: '2px solid #22C55E',
-    display: 'flex',
-    gap: '15px',
-    alignItems: 'center'
-  },
-  milestoneEmoji: {
-    fontSize: '36px'
-  },
-  leaderboardSection: {
-    marginTop: '20px'
-  },
-  leaderboard: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    marginBottom: '20px'
-  },
-  leaderboardItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '15px',
-    padding: '12px',
-    borderRadius: '6px',
-    fontWeight: 'bold'
-  },
-  position: {
-    minWidth: '40px',
-    fontSize: '18px'
-  },
-  badge: {
-    fontSize: '24px',
-    minWidth: '30px'
-  },
-  streakCount: {
-    flex: 1,
-    textAlign: 'right'
-  },
-  userPosition: {
-    backgroundColor: '#2d3436',
-    padding: '15px',
-    borderRadius: '6px',
-    border: '2px solid #3B82F6'
-  },
-  userPositionItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '10px',
-    fontSize: '18px',
-    fontWeight: 'bold'
-  },
-  refreshButton: {
-    padding: '10px 20px',
-    backgroundColor: '#3B82F6',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px'
-  }
-};
+const DetailRow = ({ label, value }) => (
+  <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
+    <Typography variant="body2">{label}</Typography>
+    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+      {value}
+    </Typography>
+  </Box>
+);

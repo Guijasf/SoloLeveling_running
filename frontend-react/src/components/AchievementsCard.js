@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, CardContent, Typography, Box, Grid, Tooltip, Paper } from '@mui/material';
 import './AchievementsCard.css';
 
 const ACHIEVEMENT_ICONS = {
@@ -23,38 +24,69 @@ function AchievementsCard({ data }) {
   }
 
   return (
-    <div className="achievements-card">
-      <h3>🏆 Conquistas</h3>
+    <Card className="achievements-card" sx={{ borderRadius: 2 }}>
+      <CardContent>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+          🏆 Conquistas
+        </Typography>
 
-      {achievements.length === 0 ? (
-        <div className="empty-state">
-          <p>Comece a completar missões para desbloquear conquistas!</p>
-        </div>
-      ) : (
-        <div className="achievements-grid">
-          {achievements.map((achievement, idx) => {
-            // Garantir que achievement é um objeto válido
-            if (!achievement || typeof achievement !== 'object') {
-              return null;
-            }
+        {achievements.length === 0 ? (
+          <Box className="empty-state" sx={{ p: 2, textAlign: 'center', color: 'text.secondary' }}>
+            <Typography variant="body2">
+              Comece a completar missões para desbloquear conquistas!
+            </Typography>
+          </Box>
+        ) : (
+          <Grid container spacing={2} className="achievements-grid">
+            {achievements.map((achievement, idx) => {
+              // Garantir que achievement é um objeto válido
+              if (!achievement || typeof achievement !== 'object') {
+                return null;
+              }
 
-            const achievementId = achievement.id || idx;
-            const achievementKey = achievement.key || 'default';
-            const info = ACHIEVEMENT_ICONS[achievementKey] || {
-              icon: '🎯',
-              name: achievement.name || 'Conquista'
-            };
+              const achievementId = achievement.id || idx;
+              const achievementKey = achievement.key || 'default';
+              const info = ACHIEVEMENT_ICONS[achievementKey] || {
+                icon: '🎯',
+                name: achievement.name || 'Conquista'
+              };
 
-            return (
-              <div key={achievementId} className="achievement-item" title={info.name}>
-                <div className="achievement-icon">{info.icon}</div>
-                <span className="achievement-name">{info.name}</span>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
+              return (
+                <Tooltip key={achievementId} title={info.name} placement="top">
+                  <Paper
+                    className="achievement-item"
+                    sx={{
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: 3
+                      }
+                    }}
+                  >
+                    <Box className="achievement-icon" sx={{ fontSize: '32px', mb: 1 }}>
+                      {info.icon}
+                    </Box>
+                    <Typography
+                      variant="caption"
+                      className="achievement-name"
+                      sx={{ textAlign: 'center', fontSize: '12px', fontWeight: '500' }}
+                    >
+                      {info.name}
+                    </Typography>
+                  </Paper>
+                </Tooltip>
+              );
+            })}
+          </Grid>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

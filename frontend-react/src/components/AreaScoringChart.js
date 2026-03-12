@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Radar } from 'react-chartjs-2';
+import { Box, Card, CardContent, Typography, Grid, Paper, Button, CircularProgress } from '@mui/material';
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -91,14 +92,14 @@ export default function AreaScoringChart({ userId }) {
       legend: {
         display: true,
         labels: {
-          color: '#fff',
+          color: '#666',
           font: { size: 14 }
         }
       },
       tooltip: {
-        backgroundColor: '#1a1f2e',
-        titleColor: '#fff',
-        bodyColor: '#fff',
+        backgroundColor: '#fff',
+        titleColor: '#000',
+        bodyColor: '#000',
         borderColor: '#3B82F6',
         borderWidth: 1
       }
@@ -108,14 +109,14 @@ export default function AreaScoringChart({ userId }) {
         beginAtZero: true,
         max: 100,
         ticks: {
-          color: '#888',
+          color: '#999',
           font: { size: 12 }
         },
         grid: {
           color: 'rgba(59, 130, 246, 0.1)'
         },
         pointLabels: {
-          color: '#fff',
+          color: '#333',
           font: { size: 12, weight: 'bold' }
         }
       }
@@ -123,90 +124,75 @@ export default function AreaScoringChart({ userId }) {
   };
 
   return (
-    <div style={styles.container}>
-      <h2>📊 Balanceamento de Áreas</h2>
+    <Box>
+      <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+        📊 Balanceamento de Áreas
+      </Typography>
 
       {stats && (
-        <div style={styles.statsGrid}>
-          <div style={styles.statBox}>
-            <div style={styles.statValue}>{stats.life_score.toFixed(1)}</div>
-            <div style={styles.statLabel}>Score de Vida</div>
-          </div>
-          <div style={styles.statBox}>
-            <div style={styles.statValue}>✅ {stats.highest_area.area_name}</div>
-            <div style={styles.statLabel}>{stats.highest_area.score.toFixed(1)} Pts</div>
-          </div>
-          <div style={styles.statBox}>
-            <div style={styles.statValue}>⚠️ {stats.lowest_area.area_name}</div>
-            <div style={styles.statLabel}>{stats.lowest_area.score.toFixed(1)} Pts</div>
-          </div>
-        </div>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ p: 2, textAlign: 'center', borderRadius: 2 }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                {stats.life_score.toFixed(1)}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Score de Vida
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ p: 2, textAlign: 'center', borderRadius: 2 }}>
+              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                ✅ {stats.highest_area.area_name}
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'success.main' }}>
+                {stats.highest_area.score.toFixed(1)}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Pts
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ p: 2, textAlign: 'center', borderRadius: 2 }}>
+              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                ⚠️ {stats.lowest_area.area_name}
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'warning.main' }}>
+                {stats.lowest_area.score.toFixed(1)}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Pts
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
       )}
 
       {loading ? (
-        <p style={{ color: '#aaa', textAlign: 'center' }}>Carregando dados...</p>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 4 }}>
+          <CircularProgress />
+        </Box>
       ) : radarData ? (
-        <div style={styles.chartContainer}>
-          <Radar data={radarData} options={chartOptions} />
-        </div>
+        <Card sx={{ mb: 3, borderRadius: 2 }}>
+          <CardContent>
+            <Box sx={{ position: 'relative', height: '400px' }}>
+              <Radar data={radarData} options={chartOptions} />
+            </Box>
+          </CardContent>
+        </Card>
       ) : (
-        <p style={{ color: '#aaa', textAlign: 'center' }}>Nenhum dado disponível</p>
+        <Paper sx={{ p: 3, textAlign: 'center', color: 'text.secondary' }}>
+          <Typography variant="body2">
+            Nenhum dado disponível
+          </Typography>
+        </Paper>
       )}
 
-      <button onClick={loadScoringData} style={styles.refreshButton}>
+      <Button onClick={loadScoringData} variant="contained" fullWidth>
         🔄 Atualizar
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }
-
-const styles = {
-  container: {
-    padding: '20px',
-    backgroundColor: '#1a1f2e',
-    borderRadius: '8px',
-    color: '#fff'
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-    gap: '15px',
-    marginBottom: '20px'
-  },
-  statBox: {
-    backgroundColor: '#2d3436',
-    padding: '15px',
-    borderRadius: '6px',
-    textAlign: 'center',
-    border: '2px solid #3B82F6'
-  },
-  statValue: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#3B82F6',
-    marginBottom: '5px'
-  },
-  statLabel: {
-    fontSize: '12px',
-    color: '#aaa'
-  },
-  chartContainer: {
-    position: 'relative',
-    height: '400px',
-    marginBottom: '20px',
-    backgroundColor: '#2d3436',
-    padding: '20px',
-    borderRadius: '8px',
-    border: '2px solid #3B82F6'
-  },
-  refreshButton: {
-    padding: '10px 20px',
-    backgroundColor: '#3B82F6',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    width: '100%'
-  }
-};

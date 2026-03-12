@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import Chart from 'chart.js/auto';
 import './RadarChart.css';
 
@@ -112,12 +113,16 @@ function RadarChart({ data }) {
   }, [data?.area_scores]);
 
   return (
-    <div className="radar-chart-card">
-      <h3>📊 Evolução por Área</h3>
-      <div className="chart-container">
-        <canvas ref={chartRef}></canvas>
-      </div>
-    </div>
+    <Card className="radar-chart-card" sx={{ borderRadius: 2 }}>
+      <CardContent>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+          📊 Evolução por Área
+        </Typography>
+        <Box className="chart-container" sx={{ position: 'relative', height: '300px' }}>
+          <canvas ref={chartRef}></canvas>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
 

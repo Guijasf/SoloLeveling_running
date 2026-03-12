@@ -1,5 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Stack,
+  Typography,
+  Grid,
+  Avatar,
+  Chip,
+  FormControlLabel,
+  Checkbox,
+  CircularProgress,
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import AuthContext from '../context/AuthContext';
 import api from '../utils/api';
 import Header from '../components/Header';
@@ -51,134 +70,185 @@ function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Carregando perfil...</p>
-      </div>
+      <Box className="loading-container" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Carregando perfil...</Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="profile-page">
+    <Box className="profile-page">
       <Header userName={user?.name} onSettingsClick={() => navigate('/settings')} />
 
-      <div className="profile-container">
-        <div className="profile-header">
-          <div className="profile-avatar">
-            <div className="avatar-circle">
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
-            <div className="level-badge">Lv {profileData?.level || 1}</div>
-          </div>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        {/* Profile Header Card */}
+        <Card className="profile-container" sx={{ mb: 4 }}>
+          <CardContent>
+            <Box className="profile-header" sx={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 3, alignItems: 'start' }}>
+              <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
+                <Box className="profile-avatar" sx={{ textAlign: 'center', position: 'relative' }}>
+                  <Avatar
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      fontSize: '2rem',
+                      backgroundColor: 'primary.main',
+                    }}
+                  >
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <Chip
+                    label={`Lv ${profileData?.level || 1}`}
+                    color="primary"
+                    sx={{ position: 'absolute', bottom: -10, left: '50%', transform: 'translateX(-50%)' }}
+                  />
+                </Box>
 
-          <div className="profile-info">
-            <h1>{user?.name}</h1>
-            <p className="profile-title">{profileData?.title || 'Novato'}</p>
-            <div className="rank-badge rank-{profileData?.rank?.toLowerCase() || 'e'}">
-              Rank {profileData?.rank || 'E'}
-            </div>
-          </div>
+                <Box className="profile-info">
+                  <Typography variant="h4" sx={{ mb: 1 }}>{user?.name}</Typography>
+                  <Typography variant="body1" color="textSecondary" sx={{ mb: 1 }}>
+                    {profileData?.title || 'Novato'}
+                  </Typography>
+                  <Chip
+                    label={`Rank ${profileData?.rank || 'E'}`}
+                    color="primary"
+                    variant="outlined"
+                  />
+                </Box>
+              </Box>
 
-          <div className="profile-actions">
-            {!editing ? (
-              <button className="btn-primary" onClick={() => setEditing(true)}>
-                ✏️ Editar Perfil
-              </button>
-            ) : (
-              <>
-                <button className="btn-success" onClick={handleSave}>
-                  ✅ Salvar
-                </button>
-                <button className="btn-secondary" onClick={() => setEditing(false)}>
-                  ❌ Cancelar
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+              <Box className="profile-actions">
+                <Stack direction="column" spacing={1}>
+                  {!editing ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => setEditing(true)}
+                      startIcon={<EditIcon />}
+                    >
+                      Editar Perfil
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={handleSave}
+                        startIcon={<SaveIcon />}
+                        fullWidth
+                      >
+                        Salvar
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => setEditing(false)}
+                        startIcon={<CancelIcon />}
+                        fullWidth
+                      >
+                        Cancelar
+                      </Button>
+                    </>
+                  )}
+                </Stack>
+              </Box>
+            </Box>
+          </CardContent>
+        </Card>
 
-        <div className="profile-stats">
-          <div className="stat-card">
-            <div className="stat-value">{profileData?.total_xp || 0}</div>
-            <div className="stat-label">XP Total</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">{profileData?.streak || 0}</div>
-            <div className="stat-label">🔥 Sequência</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">{profileData?.achievements_count || 0}</div>
-            <div className="stat-label">🏆 Conquistas</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">{profileData?.days_active || 0}</div>
-            <div className="stat-label">📅 Dias Ativos</div>
-          </div>
-        </div>
+        {/* Stats Grid */}
+        <Grid container spacing={2} sx={{ mb: 4 }} className="profile-stats">
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" className="stat-value">{profileData?.total_xp || 0}</Typography>
+                <Typography variant="body2" color="textSecondary" className="stat-label">XP Total</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" className="stat-value">{profileData?.streak || 0}</Typography>
+                <Typography variant="body2" color="textSecondary" className="stat-label">🔥 Sequência</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" className="stat-value">{profileData?.achievements_count || 0}</Typography>
+                <Typography variant="body2" color="textSecondary" className="stat-label">🏆 Conquistas</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h5" className="stat-value">{profileData?.days_active || 0}</Typography>
+                <Typography variant="body2" color="textSecondary" className="stat-label">📅 Dias Ativos</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
 
-        <div className="profile-details">
-          <div className="detail-section">
-            <h2>📝 Biografia</h2>
-            {editing ? (
-              <textarea
-                value={formData.bio}
-                onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                placeholder="Conte um pouco sobre você..."
-                rows={4}
+        {/* Profile Details */}
+        <Stack spacing={3} className="profile-details">
+          <Card>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2 }}>📝 Biografia</Typography>
+              {editing ? (
+                <TextField
+                  multiline
+                  rows={4}
+                  value={formData.bio}
+                  onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                  placeholder="Conte um pouco sobre você..."
+                  fullWidth
+                  variant="outlined"
+                />
+              ) : (
+                <Typography>{profileData?.bio || 'Nenhuma biografia definida.'}</Typography>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2 }}>🎯 Título Atual</Typography>
+              {editing ? (
+                <TextField
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  placeholder="Ex: Estrategista, Guerreiro, Sábio..."
+                  fullWidth
+                  variant="outlined"
+                />
+              ) : (
+                <Typography>{profileData?.title || 'Novato'}</Typography>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2 }}>🌐 Privacidade</Typography>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.public_profile}
+                    onChange={(e) => setFormData({...formData, public_profile: e.target.checked})}
+                    disabled={!editing}
+                  />
+                }
+                label="Perfil público (outros usuários podem ver)"
               />
-            ) : (
-              <p>{profileData?.bio || 'Nenhuma biografia definida.'}</p>
-            )}
-          </div>
-
-          <div className="detail-section">
-            <h2>🎯 Título Atual</h2>
-            {editing ? (
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) => setFormData({...formData, title: e.target.value})}
-                placeholder="Ex: Estrategista, Guerreiro, Sábio..."
-              />
-            ) : (
-              <p>{profileData?.title || 'Novato'}</p>
-            )}
-          </div>
-
-          <div className="detail-section">
-            <h2>🌐 Privacidade</h2>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={formData.public_profile}
-                onChange={(e) => setFormData({...formData, public_profile: e.target.checked})}
-                disabled={!editing}
-              />
-              <span>Perfil público (outros usuários podem ver)</span>
-            </label>
-          </div>
-        </div>
-
-        {profileData?.public_profile && (
-          <div className="share-section">
-            <h2>🔗 Compartilhar Perfil</h2>
-            <div className="share-link">
-              <input
-                type="text"
-                value={`${window.location.origin}/profile/${user?.id}/public`}
-                readOnly
-              />
-              <button onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/profile/${user?.id}/public`);
-                alert('Link copiado!');
-              }}>
-                📋 Copiar
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+            </CardContent>
+          </Card>
+        </Stack>
+      </Container>
+    </Box>
   );
 }
 

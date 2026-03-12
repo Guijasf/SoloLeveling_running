@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Container, Paper, Typography, Button, Stack, CircularProgress, Chip } from '@mui/material';
 import AuthContext from '../context/AuthContext';
 import api from '../utils/api';
 import Header from '../components/Header';
@@ -61,96 +62,136 @@ function HistoryPage() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Carregando histórico...</p>
-      </div>
+      <Box className="loading-container" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Carregando histórico...</Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="history-page">
+    <Box className="history-page">
       <Header userName={user?.name} onSettingsClick={() => navigate('/settings')} />
 
-      <div className="history-container">
-        <div className="history-header">
-          <h1>📜 Histórico de Eventos</h1>
-          <p>Acompanhe sua jornada e evolução</p>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Box className="history-header" sx={{ mb: 4 }}>
+          <Typography variant="h4" sx={{ mb: 1 }}>
+            📜 Histórico de Eventos
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Acompanhe sua jornada e evolução
+          </Typography>
 
-          <div className="filter-buttons">
-            <button
-              className={filter === 'all' ? 'active' : ''}
+          <Stack direction="row" spacing={2} className="filter-buttons">
+            <Button
+              variant={filter === 'all' ? 'contained' : 'outlined'}
               onClick={() => setFilter('all')}
             >
               Todos
-            </button>
-            <button
-              className={filter === 'week' ? 'active' : ''}
+            </Button>
+            <Button
+              variant={filter === 'week' ? 'contained' : 'outlined'}
               onClick={() => setFilter('week')}
             >
               Última Semana
-            </button>
-            <button
-              className={filter === 'month' ? 'active' : ''}
+            </Button>
+            <Button
+              variant={filter === 'month' ? 'contained' : 'outlined'}
               onClick={() => setFilter('month')}
             >
               Último Mês
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Stack>
+        </Box>
 
         {historyData.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">📭</div>
-            <h2>Nenhum evento ainda</h2>
-            <p>Complete missões, ganhe XP e desbloqueie conquistas para ver seu histórico!</p>
-          </div>
+          <Paper className="empty-state" sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ mb: 2 }}>📭</Typography>
+            <Typography variant="h5" sx={{ mb: 1 }}>
+              Nenhum evento ainda
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Complete missões, ganhe XP e desbloqueie conquistas para ver seu histórico!
+            </Typography>
+          </Paper>
         ) : (
-          <div className="timeline">
+          <Box className="timeline">
             {historyData.map((event, index) => (
-              <div
+              <Paper
                 key={index}
                 className="timeline-item"
-                style={{ borderLeftColor: getEventColor(event.event_type) }}
+                sx={{
+                  p: 3,
+                  mb: 2,
+                  borderLeft: `4px solid ${getEventColor(event.event_type)}`,
+                  display: 'flex',
+                  gap: 2
+                }}
               >
-                <div className="timeline-icon" style={{ background: getEventColor(event.event_type) }}>
+                <Box
+                  className="timeline-icon"
+                  sx={{
+                    background: getEventColor(event.event_type),
+                    width: 50,
+                    height: 50,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '24px',
+                    flexShrink: 0
+                  }}
+                >
                   {getEventIcon(event.event_type)}
-                </div>
+                </Box>
 
-                <div className="timeline-content">
-                  <div className="timeline-header">
-                    <h3>{event.title}</h3>
-                    <span className="timeline-date">{formatDate(event.created_at)}</span>
-                  </div>
+                <Box className="timeline-content" sx={{ flex: 1 }}>
+                  <Box className="timeline-header" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                    <Typography variant="h6">{event.title}</Typography>
+                    <Typography variant="caption" className="timeline-date">
+                      {formatDate(event.created_at)}
+                    </Typography>
+                  </Box>
 
-                  <p className="timeline-description">{event.description}</p>
+                  <Typography variant="body2" className="timeline-description" sx={{ mb: 2, color: 'text.secondary' }}>
+                    {event.description}
+                  </Typography>
 
                   {event.metadata && (
-                    <div className="timeline-metadata">
+                    <Stack direction="row" spacing={1} className="timeline-metadata">
                       {event.metadata.xp_earned && (
-                        <span className="metadata-badge">
-                          +{event.metadata.xp_earned} XP
-                        </span>
+                        <Chip
+                          label={`+${event.metadata.xp_earned} XP`}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
                       )}
                       {event.metadata.new_level && (
-                        <span className="metadata-badge">
-                          Level {event.metadata.new_level}
-                        </span>
+                        <Chip
+                          label={`Level ${event.metadata.new_level}`}
+                          size="small"
+                          color="success"
+                          variant="outlined"
+                        />
                       )}
                       {event.metadata.new_rank && (
-                        <span className="metadata-badge">
-                          Rank {event.metadata.new_rank}
-                        </span>
+                        <Chip
+                          label={`Rank ${event.metadata.new_rank}`}
+                          size="small"
+                          color="warning"
+                          variant="outlined"
+                        />
                       )}
-                    </div>
+                    </Stack>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Paper>
             ))}
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Container>
+    </Box>
   );
 }
 

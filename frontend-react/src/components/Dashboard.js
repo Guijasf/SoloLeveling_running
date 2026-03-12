@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Box, Container, AppBar, Toolbar, Typography, Button, Stack, Grid, Paper, CircularProgress, LinearProgress, Tabs, Tab } from '@mui/material';
 import GoalsManager from './GoalsManager';
 import StreakDisplay from './StreakDisplay';
 import MissionsBoard from './MissionsBoard';
@@ -11,7 +12,7 @@ export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(0);
   const [userSettings, setUserSettings] = useState(null);
 
   useEffect(() => {
@@ -49,288 +50,136 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div style={styles.loadingContainer}>
-        <div style={styles.spinner}></div>
-        <p>Carregando seu progresso...</p>
-      </div>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Carregando seu progresso...</Typography>
+      </Box>
     );
   }
 
   const userId = user?.id || '1';
 
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   return (
-    <div style={styles.mainContainer}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
-      <header style={styles.header}>
-        <div style={styles.headerContent}>
-          <div style={styles.playerInfo}>
-            <h1 style={styles.title}>🎮 Solo Leveling</h1>
-            <div style={styles.userCard}>
-              <h2>{user?.username || 'Jogador'}</h2>
-              <div style={styles.levelBadge}>
-                <span>Nível {progress?.level || 1}</span>
-                <span>🏅 {progress?.rank || 'Iniciante'}</span>
-              </div>
-            </div>
-          </div>
-          <button onClick={loadUserData} style={styles.refreshButton}>
+      <AppBar position="static" sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+        <Toolbar>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1 }}>
+              🎮 Solo Leveling
+            </Typography>
+            {user && (
+              <Paper
+                sx={{
+                  p: 1.5,
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: 1
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                  {user?.username || 'Jogador'}
+                </Typography>
+                <Stack direction="row" spacing={2} sx={{ color: 'text.secondary', fontSize: '12px' }}>
+                  <Typography variant="caption">
+                    Nível {progress?.level || 1}
+                  </Typography>
+                  <Typography variant="caption">
+                    🏅 {progress?.rank || 'Iniciante'}
+                  </Typography>
+                </Stack>
+              </Paper>
+            )}
+          </Box>
+          <Button
+            color="inherit"
+            onClick={loadUserData}
+            sx={{ ml: 2 }}
+          >
             🔄 Atualizar
-          </button>
-        </div>
-      </header>
+          </Button>
+        </Toolbar>
+      </AppBar>
 
       {/* Navigation Tabs */}
-      <nav style={styles.tabNav}>
-        <button
-          style={{
-            ...styles.tabButton,
-            backgroundColor: activeTab === 'overview' ? '#3B82F6' : '#2d3436'
+      <Paper sx={{ borderRadius: 0 }}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{
+            borderBottom: 1,
+            borderColor: 'divider'
           }}
-          onClick={() => setActiveTab('overview')}
         >
-          📊 Visão Geral
-        </button>
-        <button
-          style={{
-            ...styles.tabButton,
-            backgroundColor: activeTab === 'missions' ? '#3B82F6' : '#2d3436'
-          }}
-          onClick={() => setActiveTab('missions')}
-        >
-          🎮 Missões
-        </button>
-        <button
-          style={{
-            ...styles.tabButton,
-            backgroundColor: activeTab === 'goals' ? '#3B82F6' : '#2d3436'
-          }}
-          onClick={() => setActiveTab('goals')}
-        >
-          🎯 Metas
-        </button>
-        <button
-          style={{
-            ...styles.tabButton,
-            backgroundColor: activeTab === 'streak' ? '#3B82F6' : '#2d3436'
-          }}
-          onClick={() => setActiveTab('streak')}
-        >
-          🔥 Sequência
-        </button>
-        <button
-          style={{
-            ...styles.tabButton,
-            backgroundColor: activeTab === 'areas' ? '#3B82F6' : '#2d3436'
-          }}
-          onClick={() => setActiveTab('areas')}
-        >
-          📍 Áreas
-        </button>
-      </nav>
+          <Tab label="📊 Visão Geral" />
+          <Tab label="🎮 Missões" />
+          <Tab label="🎯 Metas" />
+          <Tab label="🔥 Sequência" />
+          <Tab label="📍 Áreas" />
+        </Tabs>
+      </Paper>
 
       {/* Content Area */}
-      <main style={styles.content}>
-        {activeTab === 'overview' && (
-          <div style={styles.overviewGrid}>
-            <div style={styles.overviewSection}>
-              <StreakDisplay userId={userId} />
-            </div>
-            <div style={styles.overviewSection}>
-              <div style={styles.progressCard}>
-                <h3>📈 Progresso Geral</h3>
-                <div style={styles.progressBar}>
-                  <div
-                    style={{
-                      ...styles.progressFill,
-                      width: progress?.xp_percentage ? `${progress.xp_percentage}%` : '0%'
+      <Box component="main" sx={{ flex: 1, py: 4, px: 2 }}>
+        <Container maxWidth="lg">
+          {activeTab === 0 && (
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <StreakDisplay userId={userId} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Paper sx={{ p: 3, borderRadius: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+                    📈 Progresso Geral
+                  </Typography>
+                  <LinearProgress
+                    variant="determinate"
+                    value={progress?.xp_percentage ? progress.xp_percentage : 0}
+                    sx={{
+                      height: 10,
+                      borderRadius: 5,
+                      mb: 1,
+                      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                      '& .MuiLinearProgress-bar': {
+                        borderRadius: 5,
+                        background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)'
+                      }
                     }}
-                  ></div>
-                </div>
-                <p style={styles.progressText}>
-                  {progress?.current_xp || 0} / {progress?.xp_for_next_level || 100} XP
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+                  />
+                  <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                    {progress?.current_xp || 0} / {progress?.xp_for_next_level || 100} XP
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          )}
 
-        {activeTab === 'missions' && (
-          <MissionsBoard userId={userId} />
-        )}
+          {activeTab === 1 && <MissionsBoard userId={userId} />}
 
-        {activeTab === 'goals' && (
-          <GoalsManager userId={userId} />
-        )}
+          {activeTab === 2 && <GoalsManager userId={userId} />}
 
-        {activeTab === 'streak' && (
-          <StreakDisplay userId={userId} fullView={true} />
-        )}
+          {activeTab === 3 && <StreakDisplay userId={userId} />}
 
-        {activeTab === 'areas' && (
-          <AreaScoringChart userId={userId} />
-        )}
-      </main>
+          {activeTab === 4 && <AreaScoringChart userId={userId} />}
+        </Container>
+      </Box>
 
       {/* Footer */}
-      <footer style={styles.footer}>
-        <p>🎮 Solo Leveling - Transforme sua vida em uma aventura épica</p>
-        <p style={styles.footerStats}>
+      <Paper sx={{ mt: 'auto', p: 2, borderRadius: 0, textAlign: 'center', color: 'text.secondary' }}>
+        <Typography variant="body2" sx={{ mb: 1 }}>
+          🎮 Solo Leveling - Transforme sua vida em uma aventura épica
+        </Typography>
+        <Typography variant="caption">
           Nível: {progress?.level || 1} | Rank: {progress?.rank || 'Iniciante'} | 
           Seguidores: {progress?.total_followers || 0}
-        </p>
-      </footer>
-    </div>
+        </Typography>
+      </Paper>
+    </Box>
   );
 }
-
-const styles = {
-  mainContainer: {
-    minHeight: '100vh',
-    backgroundColor: '#0f1419',
-    color: '#fff',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  header: {
-    backgroundColor: '#1a1f2e',
-    padding: '20px',
-    borderBottom: '2px solid #3B82F6',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
-  },
-  headerContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    maxWidth: '1400px',
-    margin: '0 auto',
-    width: '100%'
-  },
-  playerInfo: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px'
-  },
-  title: {
-    margin: 0,
-    fontSize: '28px',
-    fontWeight: 'bold',
-    background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent'
-  },
-  userCard: {
-    backgroundColor: '#2d3436',
-    padding: '15px 20px',
-    borderRadius: '6px',
-    border: '2px solid #3B82F6'
-  },
-  userCard: {
-    h2: {
-      margin: '0 0 8px 0',
-      fontSize: '18px'
-    }
-  },
-  levelBadge: {
-    display: 'flex',
-    gap: '15px',
-    fontSize: '14px',
-    color: '#FACC15'
-  },
-  refreshButton: {
-    padding: '10px 20px',
-    backgroundColor: '#3B82F6',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '16px'
-  },
-  tabNav: {
-    display: 'flex',
-    gap: '10px',
-    padding: '15px 20px',
-    backgroundColor: '#1a1f2e',
-    borderBottom: '1px solid #3d4451',
-    overflowX: 'auto'
-  },
-  tabButton: {
-    padding: '10px 15px',
-    border: 'none',
-    borderRadius: '4px',
-    color: '#fff',
-    cursor: 'pointer',
-    fontSize: '14px',
-    whiteSpace: 'nowrap',
-    transition: 'background-color 0.3s'
-  },
-  content: {
-    flex: 1,
-    padding: '20px',
-    maxWidth: '1400px',
-    margin: '0 auto',
-    width: '100%'
-  },
-  overviewGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '20px'
-  },
-  overviewSection: {
-    backgroundColor: '#1a1f2e',
-    borderRadius: '8px'
-  },
-  progressCard: {
-    backgroundColor: '#1a1f2e',
-    padding: '20px',
-    borderRadius: '8px',
-    border: '2px solid #3B82F6'
-  },
-  progressBar: {
-    width: '100%',
-    height: '30px',
-    backgroundColor: '#2d3436',
-    borderRadius: '4px',
-    overflow: 'hidden',
-    margin: '15px 0'
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: 'linear-gradient(90deg, #3B82F6, #8B5CF6)',
-    transition: 'width 0.5s ease'
-  },
-  progressText: {
-    margin: 0,
-    fontSize: '14px',
-    color: '#aaa',
-    textAlign: 'center'
-  },
-  footer: {
-    backgroundColor: '#1a1f2e',
-    borderTop: '1px solid #3d4451',
-    padding: '15px',
-    textAlign: 'center',
-    color: '#888',
-    fontSize: '14px'
-  },
-  footerStats: {
-    margin: '8px 0 0 0',
-    fontSize: '12px'
-  },
-  loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#0f1419',
-    color: '#fff'
-  },
-  spinner: {
-    width: '50px',
-    height: '50px',
-    border: '4px solid #3d4451',
-    borderTop: '4px solid #3B82F6',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite'
-  }
-};

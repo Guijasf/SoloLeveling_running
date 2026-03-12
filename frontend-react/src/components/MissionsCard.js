@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Card, CardContent, Typography, Box, Button, Stack, Chip, CircularProgress } from '@mui/material';
 import api from '../utils/api';
 import './MissionsCard.css';
 
@@ -29,48 +30,81 @@ function MissionsCard({ data }) {
   });
 
   return (
-    <div className="missions-card">
-      <h3>🎯 Missões de Hoje</h3>
+    <Card className="missions-card" sx={{ borderRadius: 2 }}>
+      <CardContent>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+          🎯 Missões de Hoje
+        </Typography>
 
-      {missions.length === 0 ? (
-        <div className="empty-state">
-          <p>Nenhuma missão disponível</p>
-        </div>
-      ) : (
-        <div className="missions-list">
-          {validMissions.length === 0 ? (
-            <div className="empty-state">
-              <p>Nenhuma missão válida disponível</p>
-            </div>
-          ) : (
-            validMissions.map((mission) => (
-              <div
-                key={mission.id}
-                className={`mission-item ${completedMissions.has(mission.id) ? 'completed' : ''}`}
-              >
-                <div className="mission-info">
-                  <h4>{mission.title || 'Sem título'}</h4>
-                  <p>{mission.description || 'Sem descrição'}</p>
-                  <div className="mission-meta">
-                    <span className="difficulty" style={{ color: getDifficultyColor(mission.difficulty) }}>
-                      {mission.difficulty || 'Normal'}
-                    </span>
-                    <span className="reward">+{mission.xp_reward || 0} XP</span>
-                  </div>
-                </div>
-                <button
-                  className="btn-complete"
-                  onClick={() => handleCompleteMission(mission.id)}
-                  disabled={completedMissions.has(mission.id) || loading}
+        {missions.length === 0 ? (
+          <Box className="empty-state" sx={{ p: 2, textAlign: 'center', color: 'text.secondary' }}>
+            <Typography>Nenhuma missão disponível</Typography>
+          </Box>
+        ) : (
+          <Box className="missions-list">
+            {validMissions.length === 0 ? (
+              <Box className="empty-state" sx={{ p: 2, textAlign: 'center', color: 'text.secondary' }}>
+                <Typography>Nenhuma missão válida disponível</Typography>
+              </Box>
+            ) : (
+              validMissions.map((mission) => (
+                <Box
+                  key={mission.id}
+                  className={`mission-item ${completedMissions.has(mission.id) ? 'completed' : ''}`}
+                  sx={{
+                    p: 2,
+                    mb: 2,
+                    borderRadius: 1,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    opacity: completedMissions.has(mission.id) ? 0.6 : 1,
+                    transition: 'all 0.2s'
+                  }}
                 >
-                  {completedMissions.has(mission.id) ? '✓' : 'Completar'}
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-      )}
-    </div>
+                  <Box className="mission-info" sx={{ mb: 1.5 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                      {mission.title || 'Sem título'}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                      {mission.description || 'Sem descrição'}
+                    </Typography>
+                    <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                      <Chip
+                        label={mission.difficulty || 'Normal'}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          color: getDifficultyColor(mission.difficulty),
+                          borderColor: getDifficultyColor(mission.difficulty)
+                        }}
+                      />
+                      <Chip
+                        label={`+${mission.xp_reward || 0} XP`}
+                        size="small"
+                        color="success"
+                        variant="filled"
+                      />
+                    </Stack>
+                  </Box>
+                  <Button
+                    className="btn-complete"
+                    variant="contained"
+                    color={completedMissions.has(mission.id) ? 'success' : 'primary'}
+                    onClick={() => handleCompleteMission(mission.id)}
+                    disabled={completedMissions.has(mission.id) || loading}
+                    fullWidth
+                    size="small"
+                    sx={{ mt: 1 }}
+                  >
+                    {completedMissions.has(mission.id) ? '✓ Completada' : 'Completar'}
+                  </Button>
+                </Box>
+              ))
+            )}
+          </Box>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
