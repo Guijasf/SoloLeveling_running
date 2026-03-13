@@ -1,0 +1,13 @@
+/* Radar Chart Styles */
+.radar-chart-container {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radar-chart {
+  width: 100%;
+  height: 100%;
+}

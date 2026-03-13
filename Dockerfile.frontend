@@ -1,0 +1,23 @@
+# Frontend Dockerfile - Node 20
+FROM node:20-slim
+
+WORKDIR /app
+
+# Copiar package files
+COPY frontend-react/package*.json ./
+
+# Instalar dependências (com legacy peer deps para compatibilidade)
+RUN npm install --legacy-peer-deps --no-audit --no-fund
+
+# Copiar código source
+COPY frontend-react/ .
+
+# Expor porta
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1
+
+# Rodar em desenvolvimento
+CMD ["npm", "start"]

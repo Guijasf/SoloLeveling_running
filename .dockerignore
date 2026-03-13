@@ -1,53 +1,70 @@
+# Version Control
+.git
+.gitignore
+.gitattributes
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
 *.egg
-MANIFEST
+*.egg-info/
+dist/
+build/
+.Python
+pip-log.txt
 .venv/
 venv/
 ENV/
 env/
 
-# IDE
+# Node & npm
+node_modules/
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+
+# IDE & Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.vscode-server
 .DS_Store
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
+.nyc_output/
 
-# Node (frontend)
-node_modules/
-npm-debug.log
-yarn-error.log
+# Build artifacts
 dist/
+build/
+frontend-react/build/
 
-# OS
-.git
+# Docker
+Dockerfile*
+docker-compose.yml
+.dockerignore
+
+# Data
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Documentation
+*.md
+docs/
+.github/
+
+# CI/CD
+.gitlab-ci.yml
+.github/
+.travis.yml
 .gitignore
 .github/
 

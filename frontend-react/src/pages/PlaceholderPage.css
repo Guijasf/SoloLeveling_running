@@ -1,0 +1,20 @@
+/* Placeholder Page Styles */
+.placeholder-container {
+  padding: 40px 20px;
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.placeholder-message {
+  font-size: 1.1rem;
+  color: #666;
+}
